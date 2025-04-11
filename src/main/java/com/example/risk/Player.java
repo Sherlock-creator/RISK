@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import java.util.HashSet;
 
 /**
- * Represents a player in the game.
+ * Represents a player in the game
  * @author Bryce Peterson and Noah Jones
  */
 public class Player {
@@ -26,8 +26,8 @@ public class Player {
 
     /**
      * Standard constructor, directly takes id and color and sets them as private variables
-     * @param id
-     * @param color
+     * @param id Identifying string that can be a players name
+     * @param color Color that will be associated with a players controlled territories
      */
     public Player(String id, Color color){
         this.id = id;
