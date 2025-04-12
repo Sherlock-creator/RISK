@@ -61,6 +61,7 @@ public class Player {
 
     /**
      * Either calculates how many total troops the player can have or how many the player can deploy this turn
+     * TBD which of these two behaviors it will have
      * @return number of troops
      */
     public int getDeployCount(){
