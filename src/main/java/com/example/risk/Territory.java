@@ -1,6 +1,8 @@
 package com.example.risk;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 
 /**
  * Contains information necessary to take, control, and attack from a territory in risk
@@ -121,8 +123,11 @@ public class Territory {
      * @param t the territory that the troops will be moved to
      * @param troops number of troops to be moved
      */
-    void moveTroops(Territory t, int troops){
-        //TODO
+    public void moveTroops(Territory t, int troops){
+        if (canMoveTroops(t)) {
+            addTroops(-troops);
+            t.addTroops(troops);
+        }
     }
 
     /**
@@ -131,16 +136,95 @@ public class Territory {
      * @return boolean -true if troops can be moved
      */
     public boolean canMoveTroops(Territory t){
-        //TODO
+        //loops through the HashSet that is returned by getConnected and if t is in their return true
+        for (Territory territory : getConnected()) {
+            if (territory == t) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     /**
      * Wages war on a neighboring opponent controlled territory and, if successful in destroying the enemy troops, moves the troops into that territory and conquers it
      * @param t Territory to wage war on
+     * @throws Exception if t is not a neighbor of this territory
      */
-    public void conquer(Territory t){
-        //TODO
+    public void conquer(Territory t) throws Exception{
+        if (!canConquer(t)) {
+            throw new Exception();
+        }
+
+        int attackerDice;
+        int defenderDice;
+
+        //sets attacker dice total
+        if (troops < 3) {
+            attackerDice = troops;
+        }
+        else {
+            attackerDice = 3;
+        }
+
+        //sets defender dice total
+        if (t.troops < 2) {
+            defenderDice = t.troops;
+        }
+        else {
+            defenderDice = 2;
+        }
+
+        Random r = new Random();
+        ArrayList<Integer> attackerRolls = new ArrayList<>();
+        for (int i = 0; i < attackerDice; i++) {
+            attackerRolls.add((r.nextInt(6)+1));
+        }
+
+        ArrayList<Integer> defenderRolls = new ArrayList<>();
+        for (int i = 0; i < defenderDice; i++) {
+            defenderRolls.add((r.nextInt(6)+1));
+        }
+
+        attackerRolls = sortRolls(attackerRolls);
+        defenderRolls = sortRolls(defenderRolls);
+
+        int attackerLosses = 0;
+        int defenderLosses = 0;
+        while ((!attackerRolls.isEmpty()) && (!defenderRolls.isEmpty())) {
+            if (attackerRolls.getFirst() > defenderRolls.getFirst()) {
+                defenderLosses--;
+            }
+            else {
+                attackerLosses--;
+            }
+            attackerRolls.removeFirst();
+            defenderRolls.removeFirst();
+        }
+
+        addTroops(attackerLosses);
+        t.addTroops(defenderLosses);
+    }
+
+    /**
+     * Sorts an arraylist from highest to lowest
+     * @param rolls Arraylist of ints
+     * @return sorted arraylist
+     */
+    private ArrayList<Integer> sortRolls(ArrayList<Integer> rolls) {
+        ArrayList<Integer> sorted = new ArrayList<>();
+        int size = rolls.size();
+        for (int i = 0; i < size; i++) {
+            int max = 0;
+            for (int roll : rolls) {
+                if (roll > max) {
+                    max = roll;
+                }
+            }
+            sorted.add(max);
+            rolls.remove((Object) max);
+        }
+        return sorted;
     }
 
     /**
@@ -148,16 +232,27 @@ public class Territory {
      * @param t Territory that is being attempted to be conquered
      * @return boolean -true if territory can be conquered
      */
-    public boolean canConquer(Territory t){
-        //TODO
+    public boolean canConquer(Territory t) {
+        //loops through the territories neighbors and checks if t is one of them
+        for (Territory territory : neighbors) {
+            if (territory == t) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     /**
      * Adds the specified number of troops to the territories troop total
      * @param amt the amount of troops to add
+     * @throws IllegalArgumentException if amt is negative and has a greater absolute value than the current value of troops + 1
      */
-    public void addTroops(int amt){
-        //TODO
+    public void addTroops(int amt) throws IllegalArgumentException{
+        // check if the amount being added will reduce the troop count in the territory bellow 1
+        if (amt < 0 && ((-1*amt) + 1) > troops) {
+            throw new IllegalArgumentException();
+        }
+        troops += amt;
     }
 }
