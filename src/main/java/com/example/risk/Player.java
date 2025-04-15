@@ -55,8 +55,14 @@ public class Player {
      * @return set of controlled territories
      */
     public HashSet<Territory> getControlledTerritories(){
-        // TODO
-        return new HashSet<>();
+        HashSet<Territory> controlled = new HashSet<>();
+
+        for (Territory t : board.getTerritories()) {
+            if (t.getPlayer().id.equals(id)) {
+                controlled.add(t);
+            }
+        }
+        return controlled;
     }
 
     /**
