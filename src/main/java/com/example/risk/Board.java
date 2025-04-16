@@ -63,6 +63,10 @@ public class Board {
      * Sets currentPlayer to the next player in players
      */
     public void nextPlayer(){
-        //TODO
+        for (int i = 0; i < players.size(); i++) {
+            if (currentPlayer == players.get(i)) {
+                currentPlayer = players.get((i+1) % players.size());
+            }
+        }
     }
 }
