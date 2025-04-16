@@ -10,6 +10,8 @@ import java.util.Random;
  */
 public class Territory {
 
+    //region Variables
+
     /**
      * Number of troops in this territory
      */
@@ -35,6 +37,10 @@ public class Territory {
      */
     private HashSet<Territory> neighbors;
 
+    //endregion
+
+    //region Constructors
+
     /**
      * Standard constructor, x and y are directly set as private variables
      * Neighbors and player are initially null, they will be added by Board
@@ -45,6 +51,10 @@ public class Territory {
         this.x = x;
         this.y = y;
     }
+
+    //endregion
+
+    //region Getters
 
     /**
      * Returns player that controls this territory
@@ -86,6 +96,10 @@ public class Territory {
         return neighbors;
     }
 
+    //endregion
+
+    //region Setters
+
     /**
      * Sets the player reference that controls the territory
      * @param player player object reference
@@ -109,14 +123,9 @@ public class Territory {
         //TODO
     }
 
-    /**
-     * Gets a list of territories that are connected and controlled by the same player
-     * @return HashSet of Territories
-     */
-    public HashSet<Territory> getConnected(){
-        //TODO
-        return new HashSet<>();
-    }
+    //endregion
+
+    //region Move Logic
 
     /**
      * Moves the specified number of troops in this territory to the specified territory
@@ -147,6 +156,22 @@ public class Territory {
     }
 
     /**
+     * Gets a list of territories that are connected and controlled by the same player
+     * @return HashSet of Territories
+     */
+    public HashSet<Territory> getConnected(){
+        //TODO
+
+        // Iterate through neighbors
+
+        return new HashSet<>();
+    }
+
+    //endregion
+
+    //region Conquer Logic
+
+    /**
      * Wages war on a neighboring opponent controlled territory and, if successful in destroying the enemy troops, moves the troops into that territory and conquers it
      * @param defender Territory to wage war on
      * @throws Exception if t is not a neighbor of this territory
@@ -160,20 +185,10 @@ public class Territory {
         int defenderDice;
 
         //sets attacker dice total
-        if (troops < 3) {
-            attackerDice = troops;
-        }
-        else {
-            attackerDice = 3;
-        }
+		attackerDice = Math.min(troops, 3);
 
         //sets defender dice total
-        if (defender.troops < 2) {
-            defenderDice = defender.troops;
-        }
-        else {
-            defenderDice = 2;
-        }
+		defenderDice = Math.min(defender.troops, 2);
 
         Random r = new Random();
         ArrayList<Integer> attackerRolls = new ArrayList<>();
@@ -255,4 +270,6 @@ public class Territory {
         }
         troops += amt;
     }
+
+    //endregion
 }
