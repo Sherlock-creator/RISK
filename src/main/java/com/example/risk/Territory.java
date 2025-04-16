@@ -96,10 +96,10 @@ public class Territory {
 
     /**
      * Sets the number of troops in a territory
-     * @param troops amount of troops to set the territory to
+     * @param amt amount of troops to set the territory to
      */
-    public void setTroops(int troops) {
-        this.troops = troops;
+    public void setTroops(int amt) {
+        this.troops = amt;
     }
 
     /**
@@ -120,25 +120,25 @@ public class Territory {
 
     /**
      * Moves the specified number of troops in this territory to the specified territory
-     * @param t the territory that the troops will be moved to
-     * @param troops number of troops to be moved
+     * @param other the territory that the troops will be moved to
+     * @param amt number of troops to be moved
      */
-    public void moveTroops(Territory t, int troops){
-        if (canMoveTroops(t)) {
-            addTroops(-troops);
-            t.addTroops(troops);
+    public void moveTroops(Territory other, int amt){
+        if (canMoveTroops(other)) {
+            addTroops(-amt);
+            other.addTroops(amt);
         }
     }
 
     /**
      * Returns a boolean that is true if troops are able to move from this territory to the specified territory
-     * @param t the territory that troops are attempting to be moved to
+     * @param other the territory that troops are attempting to be moved to
      * @return boolean -true if troops can be moved
      */
-    public boolean canMoveTroops(Territory t){
+    public boolean canMoveTroops(Territory other){
         //loops through the HashSet that is returned by getConnected and if t is in their return true
         for (Territory territory : getConnected()) {
-            if (territory == t) {
+            if (territory == other) {
                 return true;
             }
         }
@@ -148,11 +148,11 @@ public class Territory {
 
     /**
      * Wages war on a neighboring opponent controlled territory and, if successful in destroying the enemy troops, moves the troops into that territory and conquers it
-     * @param t Territory to wage war on
+     * @param defender Territory to wage war on
      * @throws Exception if t is not a neighbor of this territory
      */
-    public void conquer(Territory t) throws Exception{
-        if (!canConquer(t)) {
+    public void conquer(Territory defender) throws Exception{
+        if (!canConquer(defender)) {
             throw new Exception();
         }
 
@@ -168,8 +168,8 @@ public class Territory {
         }
 
         //sets defender dice total
-        if (t.troops < 2) {
-            defenderDice = t.troops;
+        if (defender.troops < 2) {
+            defenderDice = defender.troops;
         }
         else {
             defenderDice = 2;
@@ -203,7 +203,7 @@ public class Territory {
         }
 
         addTroops(attackerLosses);
-        t.addTroops(defenderLosses);
+        defender.addTroops(defenderLosses);
     }
 
     /**
@@ -229,13 +229,13 @@ public class Territory {
 
     /**
      * Returns a boolean that is true if it is possible to engage in a war with a neighboring territory
-     * @param t Territory that is being attempted to be conquered
+     * @param defender Territory that is being attempted to be conquered
      * @return boolean -true if territory can be conquered
      */
-    public boolean canConquer(Territory t) {
+    public boolean canConquer(Territory defender) {
         //loops through the territories neighbors and checks if t is one of them
         for (Territory territory : neighbors) {
-            if (territory == t) {
+            if (territory == defender) {
                 return true;
             }
         }

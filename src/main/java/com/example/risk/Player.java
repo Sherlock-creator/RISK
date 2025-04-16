@@ -35,6 +35,14 @@ public class Player {
     }
 
     /**
+     * Default constructor for stubs, id is "" and color is black
+     */
+    public Player() {
+        id = "";
+        color = new Color(0, 0, 0, 0);
+    }
+
+    /**
      * Returns id
      * @return id
      */

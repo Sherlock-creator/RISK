@@ -25,7 +25,8 @@ public class Board {
     private HashSet<Territory> territories;
 
     /**
-     * Standard Constructor, players and territories are directly set as private variables
+     * Standard constructor, players and territories are directly set as private variables,
+     * currentPlayer is set as the first player in players
      * @param players list of players in the game
      * @param territories set of territories that comprise the board
      */
@@ -36,7 +37,18 @@ public class Board {
     }
 
     /**
-     * Returns the list of players still in the game
+     * Default constructor for stubs, players is two default Player objects, territories is initially empty,
+     * currentPlayer is set as the first player in players
+     */
+    public Board() {
+        Player[] playersArray = new Player[]{new Player(), new Player()};
+        players = new ArrayList<>();
+        territories = new HashSet<>();
+        currentPlayer = players.getFirst();
+    }
+
+    /**
+     * Returns the reference of the list of players still in the game
      * @return ArrayList of players
      */
     public ArrayList<Player> getPlayers() {
@@ -44,7 +56,7 @@ public class Board {
     }
 
     /**
-     * Returns the set of territories that are on the board
+     * Returns the reference of the set of territories that are on the board
      * @return HashSet of Territories
      */
     public HashSet<Territory> getTerritories() {
@@ -52,7 +64,7 @@ public class Board {
     }
 
     /**
-     * Returns the player whose turn it currently is
+     * Returns the reference of the player whose turn it currently is
      * @return player
      */
     public Player getCurrentPlayer() {
@@ -62,11 +74,19 @@ public class Board {
     /**
      * Sets currentPlayer to the next player in players
      */
-    public void nextPlayer(){
+    public void nextPlayer() {
         for (int i = 0; i < players.size(); i++) {
             if (currentPlayer == players.get(i)) {
                 currentPlayer = players.get((i+1) % players.size());
             }
         }
+    }
+
+    /**
+     * Removes a Player from players
+     * @param player the player you want to remove
+     */
+    public void removePlayer(Player player) {
+        // TODO
     }
 }
