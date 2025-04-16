@@ -9,6 +9,8 @@ import java.util.HashSet;
  */
 public class Board {
 
+    //region Variables
+
     /**
      * List of players currently in the game
      */
@@ -23,6 +25,10 @@ public class Board {
      * Set of Territory objects that make up the spaces on the board
      */
     private HashSet<Territory> territories;
+
+    //endregion
+
+    //region Constructors
 
     /**
      * Standard constructor, players and territories are directly set as private variables,
@@ -46,6 +52,10 @@ public class Board {
         territories = new HashSet<>();
         currentPlayer = players.getFirst();
     }
+
+    //endregion
+
+    //region Getters
 
     /**
      * Returns the reference of the list of players still in the game
@@ -71,6 +81,10 @@ public class Board {
         return currentPlayer;
     }
 
+    //endregion
+
+    //region Game Logic
+
     /**
      * Sets currentPlayer to the next player in players
      */
@@ -87,6 +101,8 @@ public class Board {
      * @param player the player you want to remove
      */
     public void removePlayer(Player player) {
-        // TODO
+        players.remove(player);
     }
+
+    //endregion
 }
