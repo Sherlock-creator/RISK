@@ -9,6 +9,8 @@ import java.util.HashSet;
  */
 public class Player {
 
+	//region Variables
+
 	/**
 	 * Identifying string, can be the player's name
 	 */
@@ -23,6 +25,10 @@ public class Player {
 	 * Gives the player's methods access to the board the player's in
 	 */
 	private Board board;
+
+	//endregion
+
+	//region Constructors
 
 	/**
 	 * Standard constructor, directly takes id and color and sets them as private variables
@@ -41,6 +47,10 @@ public class Player {
 		id = "";
 		color = new Color(0, 0, 0, 0);
 	}
+
+	//endregion
+
+	//region Getters
 
 	/**
 	 * Returns id
@@ -82,4 +92,7 @@ public class Player {
 		// TODO
 		return -1;
 	}
+
+	//endregion
+
 }
