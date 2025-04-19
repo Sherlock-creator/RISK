@@ -14,12 +14,12 @@ public class Player {
 	/**
 	 * Identifying string, can be the player's name
 	 */
-	private String id;
+	private String id = "";
 
 	/**
 	 * Color that represents the player on the board
 	 */
-	private Color color;
+	private Color color = new Color(0, 0, 0, 0);
 
 	/**
 	 * Gives the player's methods access to the board the player's in
@@ -43,10 +43,7 @@ public class Player {
 	/**
 	 * Default constructor for stubs, id is "" and color is black
 	 */
-	public Player() {
-		id = "";
-		color = new Color(0, 0, 0, 0);
-	}
+	public Player() {}
 
 	//endregion
 
