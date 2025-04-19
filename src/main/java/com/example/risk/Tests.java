@@ -1,0 +1,59 @@
+package com.example.risk;
+
+import javafx.scene.paint.Color;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class Tests {
+
+	//region Default Constructor Tests
+
+	@Test
+	public void defaultConstructorTerritory() {
+		Territory territory = new Territory();
+
+		assertEquals(0, territory.getTroops());
+		assertEquals(new Player(), territory.getPlayer());
+		assertEquals(new HashSet<>(), territory.getConnected());
+		assertEquals(0, territory.getX());
+		assertEquals(0, territory.getY());
+		assertEquals(new HashSet<>(), territory.getNeighbors());
+	}
+
+	@Test
+	public void defaultConstructorPlayer() {
+		Player player = new Player();
+
+		assertEquals(new Color(0,0,0,0), player.getColor());
+		assertEquals("", player.getId());
+		assertEquals(new HashSet<>(), player.getControlledTerritories());
+		assertEquals(0, player.getDeployCount());
+	}
+
+	@Test
+	public void defaultConstructorBoard() {
+		Board board = new Board();
+
+		assertEquals(new Player(), board.getCurrentPlayer());
+		assertEquals(new HashSet<>(), board.getTerritories());
+
+		Player[] playersArray = {new Player(), new Player()};
+		ArrayList<Player> players = new ArrayList<>();
+		assertEquals(players, board.getPlayers());
+	}
+
+	//endregion
+
+	//region Game Logic Tests
+
+	@Test
+	public void getConnected() {
+
+	}
+
+	//endregion
+}
