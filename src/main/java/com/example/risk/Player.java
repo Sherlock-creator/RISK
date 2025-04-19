@@ -9,77 +9,77 @@ import java.util.HashSet;
  */
 public class Player {
 
-    /**
-     * Identifying string, can be the player's name
-     */
-    private String id;
+	/**
+	 * Identifying string, can be the player's name
+	 */
+	private String id;
 
-    /**
-     * Color that represents the player on the board
-     */
-    private Color color;
+	/**
+	 * Color that represents the player on the board
+	 */
+	private Color color;
 
-    /**
-     * Gives the player's methods access to the board the player's in
-     */
-    private Board board;
+	/**
+	 * Gives the player's methods access to the board the player's in
+	 */
+	private Board board;
 
-    /**
-     * Standard constructor, directly takes id and color and sets them as private variables
-     * @param id Identifying string that can be a players name
-     * @param color Color that will be associated with a players controlled territories
-     */
-    public Player(String id, Color color){
-        this.id = id;
-        this.color = color;
-    }
+	/**
+	 * Standard constructor, directly takes id and color and sets them as private variables
+	 * @param id Identifying string that can be a players name
+	 * @param color Color that will be associated with a players controlled territories
+	 */
+	public Player(String id, Color color){
+		this.id = id;
+		this.color = color;
+	}
 
-    /**
-     * Default constructor for stubs, id is "" and color is black
-     */
-    public Player() {
-        id = "";
-        color = new Color(0, 0, 0, 0);
-    }
+	/**
+	 * Default constructor for stubs, id is "" and color is black
+	 */
+	public Player() {
+		id = "";
+		color = new Color(0, 0, 0, 0);
+	}
 
-    /**
-     * Returns id
-     * @return id
-     */
-    public String getId() {
-        return id;
-    }
+	/**
+	 * Returns id
+	 * @return id
+	 */
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * Returns color
-     * @return color
-     */
-    public Color getColor() {
-        return color;
-    }
+	/**
+	 * Returns color
+	 * @return color
+	 */
+	public Color getColor() {
+		return color;
+	}
 
-    /**
-     * Fetches from the main board which territories are controlled by the player
-     * @return set of controlled territories
-     */
-    public HashSet<Territory> getControlledTerritories(){
-        HashSet<Territory> controlled = new HashSet<>();
+	/**
+	 * Fetches from the main board which territories are controlled by the player
+	 * @return set of controlled territories
+	 */
+	public HashSet<Territory> getControlledTerritories(){
+		HashSet<Territory> controlled = new HashSet<>();
 
-        for (Territory t : board.getTerritories()) {
-            if (t.getPlayer().id.equals(id)) {
-                controlled.add(t);
-            }
-        }
-        return controlled;
-    }
+		for (Territory t : board.getTerritories()) {
+			if (t.getPlayer().id.equals(id)) {
+				controlled.add(t);
+			}
+		}
+		return controlled;
+	}
 
-    /**
-     * Either calculates how many total troops the player can have or how many the player can deploy this turn
-     * TBD which of these two behaviors it will have
-     * @return number of troops
-     */
-    public int getDeployCount(){
-        // TODO
-        return -1;
-    }
+	/**
+	 * Either calculates how many total troops the player can have or how many the player can deploy this turn
+	 * TBD which of these two behaviors it will have
+	 * @return number of troops
+	 */
+	public int getDeployCount(){
+		// TODO
+		return -1;
+	}
 }
