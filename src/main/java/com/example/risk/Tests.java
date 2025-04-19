@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +43,7 @@ public class Tests {
 		assertEquals(new HashSet<>(), board.getTerritories());
 
 		Player[] playersArray = {new Player(), new Player()};
-		ArrayList<Player> players = new ArrayList<>();
+		ArrayList<Player> players = new ArrayList<>(List.of(playersArray));
 		assertEquals(players, board.getPlayers());
 	}
 
