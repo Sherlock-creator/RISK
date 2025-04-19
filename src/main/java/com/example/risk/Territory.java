@@ -16,27 +16,27 @@ public class Territory {
 	/**
 	 * Number of troops in this territory
 	 */
-	private int troops;
+	private int troops = 0;
 
 	/**
 	 * Player that controls this territory
 	 */
-	private Player player;
+	private Player player = null;
 
 	/**
 	 * X position of this territory in the window
 	 */
-	private double x;
+	private double x = 0;
 
 	/**
 	 * Y position of this territory in the window
 	 */
-	private double y;
+	private double y = 0;
 
 	/**
 	 * Set of all neighboring territories
 	 */
-	private HashSet<Territory> neighbors;
+	private HashSet<Territory> neighbors = new HashSet<>();
 
 	//endregion
 
@@ -48,10 +48,26 @@ public class Territory {
 	 * @param x the x position of the territory in the window
 	 * @param y the y position of the territory in the window
 	 */
-	public Territory(double x, double y){
+	public Territory(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
+
+	/**
+	 * Standard constructor with initial neighbors parameter
+	 * @param x the x position of the territory in the window
+	 * @param y the y position of the territory in the window
+	 * @param neighbors the directly adjacent territories
+	 */
+	public Territory(double x, double y, HashSet<Territory> neighbors) {
+		this.x = x;
+		this.y = y;
+
+		neighbors.remove(this); // Just a double check. Normally this should not do anything
+		this.neighbors = neighbors;
+	}
+
+	public Territory() {}
 
 	//endregion
 
