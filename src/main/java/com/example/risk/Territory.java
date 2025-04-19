@@ -180,6 +180,10 @@ public class Territory {
 			}
 
 			connected.add(neighbor);
+
+			// Since the same connected HashSet is being passed as an argument, it's updated
+			// as part of the method body. No return value or copying is necessary, because
+			// there's only one object here: connected.
 			neighbor.updateConnected(connected);
 		}
 	}
