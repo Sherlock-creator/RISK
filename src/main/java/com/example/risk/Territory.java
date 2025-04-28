@@ -1,5 +1,7 @@
 package com.example.risk;
 
+import javafx.scene.shape.Circle;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,6 +39,16 @@ public class Territory {
 	 * Set of all neighboring territories
 	 */
 	private HashSet<Territory> neighbors = new HashSet<>();
+
+	/**
+	 * Radius, is the same for all circles
+	 */
+	static private double radius = 100;
+
+	/**
+	 * Circle for graphics
+	 */
+	private Circle circle = new Circle(x, y, radius);
 
 	//endregion
 
@@ -113,9 +125,21 @@ public class Territory {
 		return neighbors;
 	}
 
+	public Circle getCircle() {
+		return circle;
+	}
+
 	//endregion
 
 	//region Setters
+
+	/**
+	 * For setting the radius of all territories at runtime
+	 * @param r radius
+	 */
+	static public void setRadius(double r) {
+		radius = r;
+	}
 
 	/**
 	 * Sets the player reference that controls the territory
@@ -133,14 +157,8 @@ public class Territory {
 		this.troops = amt;
 	}
 
-	/**
-	 * Draws the territory in the window
-	 */
-	public void draw(){
-		//TODO
-	}
-
 	//endregion
+
 
 	//region Move Logic
 
@@ -306,6 +324,17 @@ public class Territory {
 			throw new IllegalArgumentException();
 		}
 		troops += amt;
+	}
+
+	//endregion
+
+	//region Drawing
+
+	/**
+	 * Draws the territory in the window
+	 */
+	public void draw(){
+		//TODO
 	}
 
 	//endregion
