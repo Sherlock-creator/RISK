@@ -1,6 +1,10 @@
 package com.example.risk;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Represents the current state of the board
@@ -108,6 +112,96 @@ public class Board {
 	public void drawAll() {
 		for (Territory territory : territories) {
 			territory.draw();
+		}
+	}
+
+	/**
+	 * <p>Opens and interprets a board file of the given filename.</p>
+	 *
+	 * <p><b>File format is:</b><br>
+	 * ManualNeighbors/AutomaticNeighbors<br>
+	 * [Range]<br>
+	 * TerritoryName0 y x [Neighbor0,Neighbor1,Neighbor2]<br>
+	 * TerritoryName1 y x [Neighbor0,Neighbor1,Neighbor2]<br>
+	 * TerritoryName2 y x [Neighbor0,Neighbor1,Neighbor2]</p>
+	 *
+	 * <p><b>Take note that y and x are in unconventional order for coordinates, and that y starts at 0 at the top of
+	 * the screen and increases going downwards. This is to be consistent with JavaFX.</b></p>
+	 *
+	 * <p>Neighbors should only be specified if ManualNeighbors is on.</p>
+	 *
+	 * <p>Range is only used if mode is AutomaticNeighbors. AutomaticNeighbors determines whether territories
+	 * are connected based on whether they're within Radius units of each other.</p>
+	 *
+	 * @param filename the board file that will be read
+	 * @throws FileNotFoundException if the file is not found
+	 */
+	public void readBoardFile(String filename) throws FileNotFoundException, Exception {
+		Scanner scanner = new Scanner(new File(filename));
+
+		String mode = scanner.nextLine();
+		assert mode.equals("ManualNeighbors") || mode.equals("AutomaticNeighbors")
+				: "Invalid file mode. Must be ManualNeighbors or AutomaticNeighbors";
+
+		double range;
+		if (mode.equals("AutomaticNeighbors"))
+			try {
+				range = Double.parseDouble(scanner.nextLine());
+			} catch (Exception e) {
+				throw new Exception("Range format is wrong for AutomaticNeighbors. Must be a number.");
+			}
+
+		// Map that will hold the neighbor relations between all the territories
+		HashMap<String, ArrayList<String>> neighborMap = new HashMap<>();
+		// Map that will allow for accessing territory by name
+		HashMap<String, Territory> nameMap = new HashMap<>();
+
+		// Loop through list of territories
+		while (scanner.hasNextLine()) {
+			Scanner lineScanner = new Scanner(scanner.nextLine());
+
+			// Parse name
+			String name = lineScanner.next();
+			neighborMap.put(name, new ArrayList<>());
+
+			// Parse coordinates
+			double y;
+			double x;
+			try {
+				y = Double.parseDouble(lineScanner.next());
+				x = Double.parseDouble(lineScanner.next());
+			} catch (Exception e) {
+				throw new Exception("Coordinate format is wrong. Must be a pair of numbers.");
+			}
+
+			// Add neighbors
+			ArrayList<String> neighborStrings = new ArrayList<>();
+			;
+			if (mode.equals("ManualNeighbors")) { // Parse neighbor names
+				lineScanner.useDelimiter(",");
+				while (lineScanner.hasNext()) {
+					neighborStrings.add(lineScanner.next());
+				}
+
+			}
+
+			// Create Territory object, add it to this board's list
+			Territory territory = new Territory(name, x, y);
+			territories.add(territory);
+			nameMap.put(name, territory);
+		}
+
+		// Add neighbors to each territory
+		// This needs to happen last, because nameMap isn't full until the whole file is read through
+		// (So not all the territories exist yet and can't be added as neighbors)
+		if (mode.equals("ManualNeighbors")) {
+			for (Territory territory : territories) {
+				for (String neighborName : neighborMap.get(territory.getName())) {
+					territory.addNeighbor(nameMap.get(neighborName));
+				}
+			}
+		} else if (mode.equals("AutomaticNeighbors")) {
+			//TODO optional, make a system for automatically adding neighbors based on range variable
 		}
 	}
 }

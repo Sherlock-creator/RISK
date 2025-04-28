@@ -172,6 +172,10 @@ public class Territory {
 		this.troops = amt;
 	}
 
+	public void addNeighbor(Territory neighbor) {
+		neighbors.add(neighbor);
+	}
+
 	//endregion
 
 
