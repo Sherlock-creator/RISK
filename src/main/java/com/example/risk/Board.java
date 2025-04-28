@@ -104,4 +104,10 @@ public class Board {
 	}
 
 	//endregion
+
+	public void drawAll() {
+		for (Territory territory : territories) {
+			territory.draw();
+		}
+	}
 }
