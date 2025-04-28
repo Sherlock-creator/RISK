@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class Tests {
 
-	//region Default Constructor Tests
+	//region Constructor Tests
 
 	@Test
 	public void defaultConstructorTerritory() {
@@ -45,6 +45,19 @@ public class Tests {
 		Player[] playersArray = {new Player(), new Player()};
 		ArrayList<Player> players = new ArrayList<>(List.of(playersArray));
 		assertEquals(players, board.getPlayers());
+	}
+
+	@Test
+	public void fileManualConstructorBoard() {
+		String filename = "TestBoardManual.txt";
+		Player[] playersArray = {new Player(), new Player()};
+		ArrayList<Player> playersList = new ArrayList<>(List.of(playersArray));
+
+		try {
+			Board board = new Board(playersList, filename);
+		} catch (Exception e) {
+			throw new AssertionError(e);
+		}
 	}
 
 	//endregion
