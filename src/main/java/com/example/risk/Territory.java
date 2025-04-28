@@ -16,6 +16,11 @@ public class Territory {
 	//region Variables
 
 	/**
+	 * Name of territory, displayed on the map and referenced when creating board from file
+	 */
+	private String name = "";
+
+	/**
 	 * Number of troops in this territory
 	 */
 	private int troops = 0;
@@ -60,7 +65,8 @@ public class Territory {
 	 * @param x the x position of the territory in the window
 	 * @param y the y position of the territory in the window
 	 */
-	public Territory(double x, double y) {
+	public Territory(String name, double x, double y) {
+		this.name = name;
 		this.x = x;
 		this.y = y;
 	}
@@ -71,7 +77,8 @@ public class Territory {
 	 * @param y the y position of the territory in the window
 	 * @param neighbors the directly adjacent territories
 	 */
-	public Territory(double x, double y, HashSet<Territory> neighbors) {
+	public Territory(String name, double x, double y, HashSet<Territory> neighbors) {
+		this.name = name;
 		this.x = x;
 		this.y = y;
 
@@ -86,8 +93,16 @@ public class Territory {
 	//region Getters
 
 	/**
+	 *
+	 * @return name of territory
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
 	 * Returns player that controls this territory
-	 * @return player -reference to the player object that controls this territory
+	 * @return reference to the player object that controls this territory
 	 */
 	public Player getPlayer() {
 		return player;
@@ -95,7 +110,7 @@ public class Territory {
 
 	/**
 	 * Returns number of troops in this territory
-	 * @return troops -int of troops in territory
+	 * @return number of troops in territory
 	 */
 	public int getTroops(){
 		return troops;
