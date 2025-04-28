@@ -1,0 +1,9 @@
+AutomaticNeighbors
+75
+Allentown 100,100
+Macungie 150,50
+Coopersburg 150,150
+Pennsburg 100,200
+Quakertown 200,200
+Paletown 250,210
+Perkasie 300,250
