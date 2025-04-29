@@ -42,7 +42,6 @@ public class Player {
 		this();
 		this.id = id;
 		this.color = color;
-		this.board = board;
 	}
 
 
