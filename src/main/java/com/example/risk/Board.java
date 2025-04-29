@@ -131,7 +131,7 @@ public class Board {
 		if (players.size() == 1) {
 			currentPlayer = player;
 			troopsToDeploy = player.getDeployCount(this);
-			phaseName = new Label(player.getId() + "'s " + phase + " phase");
+			phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 		}
 	}
 
@@ -193,6 +193,10 @@ public class Board {
 			basement.getChildren().add(territory.getLabel());  // so I could call basement.getChildren()
 		}
 
+		basement.getChildren().add(endTurnButton);
+		basement.getChildren().add(doneButton);
+		basement.getChildren().add(phaseName);
+
 		return basement;
 	}
 
@@ -230,6 +234,7 @@ public class Board {
 	 */
 	public void onTerritoryButton(Territory territory) {
 		if (phase.equals("deploy")) {
+			phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 			if (currentPlayer.getControlledTerritories(this).contains(territory)) {
 				territory.addTroops(1);
 				troopsToDeploy--;
