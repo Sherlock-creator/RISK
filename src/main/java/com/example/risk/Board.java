@@ -72,7 +72,6 @@ public class Board {
 	 */
 	public Board() {
 		players = new ArrayList<>();
-		currentPlayer = players.getFirst();
 		territories = new HashSet<>();
 
 		selectedTerritory = null;
@@ -115,8 +114,7 @@ public class Board {
 		this();
 		readBoardFile(filename);
 
-		troopsToDeploy = currentPlayer.getDeployCount(this);
-		phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase");
+
 	}
 
 	//endregion
@@ -132,6 +130,8 @@ public class Board {
 		players.add(player);
 		if (players.size() == 1) {
 			currentPlayer = player;
+			troopsToDeploy = player.getDeployCount(this);
+			phaseName = new Label(player.getId() + "'s " + phase + " phase");
 		}
 	}
 
