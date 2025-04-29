@@ -1,17 +1,11 @@
 package com.example.risk;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -36,12 +30,12 @@ public class HelloApplication extends Application {
 		addTroops.setOnAction(e -> territory1.addTroops(5));
 
 		Group layout = new Group();
-		layout.getChildren().add(territory1.getMenuButton());
-		layout.getChildren().add(territory1.getMenu());
+		layout.getChildren().add(territory1.getButton());
+		layout.getChildren().add(territory1.getLabel());
 		layout.getChildren().add(addTroops);
 
-		layout.getChildren().add(territory2.getMenuButton());
-		layout.getChildren().add(territory2.getMenu());
+		layout.getChildren().add(territory2.getButton());
+		layout.getChildren().add(territory2.getLabel());
 
 		Scene scene = new Scene(layout,500,500);
 		stage.setScene(scene);

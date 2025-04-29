@@ -1,14 +1,10 @@
 package com.example.risk;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -22,32 +18,37 @@ public class Territory {
 	/**
 	 * Name of territory, displayed on the map and referenced when creating board from file
 	 */
-	private String name = "";
+	private String name;
 
 	/**
 	 * Number of troops in this territory
 	 */
-	private int troops = 0;
+	private int troops;
 
 	/**
 	 * Player that controls this territory
 	 */
-	private Player player = null;
+	private Player player;
+
+	/**
+	 * Board that this territory is in
+	 */
+	private Board board;
 
 	/**
 	 * X position of this territory in the window
 	 */
-	private double x = 0;
+	private double x ;
 
 	/**
 	 * Y position of this territory in the window
 	 */
-	private double y = 0;
+	private double y;
 
 	/**
 	 * Set of all neighboring territories
 	 */
-	private HashSet<Territory> neighbors = new HashSet<>();
+	private HashSet<Territory> neighbors;
 
 	/**
 	 * Radius, is the same for all circles
@@ -59,13 +60,30 @@ public class Territory {
 	 */
 	private Circle circle = new Circle(x, y, radius);
 
-	private Button menuButton = new Button();
+	private Button button = new Button();
 
-	private TextArea menu = new TextArea();
+	private Label label = new Label();
 
 	//endregion
 
 	//region Constructors
+
+	/**
+	 * Default constructor
+	 */
+	public Territory() {
+		name = "";
+		troops = 0;
+		player = null;
+		board = null;
+		x = 0;
+		y = 0;
+		neighbors = new HashSet<>();
+
+		circle = new Circle(x, y, radius);
+		button = new Button();
+		label = new Label();
+	}
 
 	/**
 	 * Standard constructor, x and y are directly set as private variables
@@ -74,6 +92,7 @@ public class Territory {
 	 * @param y the y position of the territory in the window
 	 */
 	public Territory(String name, double x, double y) {
+		this();
 		this.name = name;
 		this.x = x;
 		this.y = y;
@@ -86,38 +105,30 @@ public class Territory {
 	 * @param neighbors the directly adjacent territories
 	 */
 	public Territory(String name, double x, double y, HashSet<Territory> neighbors) {
-		this.name = name;
-		this.x = x;
-		this.y = y;
+		this(name, x, y);
+
 		this.troops = 1;
 
 		neighbors.remove(this); // Just a double check. Normally this should not do anything
 		this.neighbors = neighbors;
 
-		menu.setVisible(false);
-		menu.setEditable(false);
-		menu.setWrapText(true);
-		menu.setMaxSize(100.0,50.0);
-		menu.setLayoutY(y-50);
-		menu.setLayoutX(x-40);
+		label.relocate(x, y-20);
+		label.setText(name);
 
-		menuButton.setLayoutY(y);
-		menuButton.setLayoutX(x);
-		menuButton.setText(((Integer)getTroops()).toString());
-		menuButton.setOnAction(e -> {
-			if (menu.isVisible()) {
-				menu.setVisible(false);
+		button.relocate(x, y);
+		button.setText(((Integer)getTroops()).toString());
+		button.setOnAction(e -> {
+			if (label.isVisible()) {
+				label.setVisible(false);
 			}
 			else {
-				menu.setText(name + "\n" +
+				label.setText(name + "\n" +
 								"troops: " + troops);
-				menu.setVisible(true);
+				label.setVisible(true);
 			}
 		});
 
 	}
-
-	public Territory() {}
 
 	//endregion
 
@@ -181,12 +192,12 @@ public class Territory {
 	/**
 	 * @return the reference to the button tied to the territory
 	 */
-	public Button getMenuButton() {
-		return menuButton;
+	public Button getButton() {
+		return button;
 	}
 
-	public TextArea getMenu() {
-		return menu;
+	public Label getLabel() {
+		return label;
 	}
 
 	//endregion
@@ -215,7 +226,7 @@ public class Territory {
 	 */
 	public void setTroops(int amt) {
 		this.troops = amt;
-		menuButton.setText(((Integer)troops).toString());
+		button.setText(((Integer)troops).toString());
 	}
 
 	public void addNeighbor(Territory neighbor) {
@@ -223,7 +234,6 @@ public class Territory {
 	}
 
 	//endregion
-
 
 	//region Move Logic
 
@@ -389,19 +399,15 @@ public class Territory {
 			throw new IllegalArgumentException();
 		}
 		troops += amt;
-		menuButton.setText(((Integer)troops).toString());
+		button.setText(((Integer)troops).toString());
 	}
 
 	//endregion
 
-	//region Drawing
+	//region Button Logic
 
-	/**
-	 * Draws the territory in the window
-	 */
-	public void draw(){
-		//TODO
-	}
+
 
 	//endregion
+
 }
