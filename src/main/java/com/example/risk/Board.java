@@ -34,15 +34,15 @@ public class Board {
 	//region Constructors
 
 	/**
-	 * Standard constructor, players and territories are directly set as private variables,
+	 * Manual, non-file based constructor, players and territories are directly set as private variables,
 	 * currentPlayer is set as the first player in players
 	 * @param players list of players in the game
 	 * @param territories set of territories that comprise the board
 	 */
 	public Board(ArrayList<Player> players, HashSet<Territory> territories){
 		this.players = players;
-		this.territories = territories;
 		currentPlayer = players.getFirst();
+		this.territories = territories;
 	}
 
 	/**
@@ -51,9 +51,22 @@ public class Board {
 	 */
 	public Board() {
 		Player[] playersArray = new Player[]{new Player(), new Player()};
-		players = new ArrayList<>();
+		players = new ArrayList<>(List.of(playersArray));
 		territories = new HashSet<>();
 		currentPlayer = players.getFirst();
+	}
+
+	/**
+	 * File based constructor, reads given filename and parses it to get the list of territories, currentPlayer is
+	 * set as the first player in players
+	 * @param players List of players in the game
+	 * @param filename Name of file that will be parsed to generate the board
+	 * @throws Exception Throws various exceptions based on what goes wrong during file parsing
+	 */
+	public Board(ArrayList<Player> players, String filename) throws Exception {
+		this.players = players;
+		currentPlayer = players.getFirst();
+		readBoardFile(filename);
 	}
 
 	//endregion
@@ -109,6 +122,9 @@ public class Board {
 
 	//endregion
 
+	/**
+	 * Loops through all territories and draws them on the map
+	 */
 	public void drawAll() {
 		for (Territory territory : territories) {
 			territory.draw();
@@ -137,6 +153,7 @@ public class Board {
 	 * @throws FileNotFoundException if the file is not found
 	 */
 	public void readBoardFile(String filename) throws FileNotFoundException, Exception {
+		territories = new HashSet<>();
 		Scanner scanner = new Scanner(new File(filename));
 
 		String mode = scanner.nextLine();
