@@ -271,7 +271,7 @@ public class Board {
 			}
 
 			// Create Territory object, add it to this board's list
-			Territory territory = new Territory(name, x, y);
+			Territory territory = new Territory(name, x, y, this);
 			territories.add(territory);
 			nameMap.put(name, territory);
 		}
