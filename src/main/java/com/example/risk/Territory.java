@@ -79,6 +79,7 @@ public class Territory {
 		x = 0;
 		y = 0;
 		neighbors = new HashSet<>();
+		troops = 1;
 
 		circle = new Circle(x, y, radius);
 		button = new Button();
@@ -86,31 +87,19 @@ public class Territory {
 	}
 
 	/**
-	 * Standard constructor, x and y are directly set as private variables
+	 * Standard constructor, name, x, y, and board are directly set as private variables
 	 * Neighbors and player are initially null, they will be added by Board
+	 * @param name the name of the territory that will be displayed, should be unique
 	 * @param x the x position of the territory in the window
 	 * @param y the y position of the territory in the window
+	 * @param board the board that this territory is on
 	 */
-	public Territory(String name, double x, double y) {
+	public Territory(String name, double x, double y, Board board) {
 		this();
 		this.name = name;
 		this.x = x;
 		this.y = y;
-	}
-
-	/**
-	 * Standard constructor with initial neighbors parameter
-	 * @param x the x position of the territory in the window
-	 * @param y the y position of the territory in the window
-	 * @param neighbors the directly adjacent territories
-	 */
-	public Territory(String name, double x, double y, HashSet<Territory> neighbors) {
-		this(name, x, y);
-
-		this.troops = 1;
-
-		neighbors.remove(this); // Just a double check. Normally this should not do anything
-		this.neighbors = neighbors;
+		this.board = board;
 
 		label.relocate(x, y-20);
 		label.setText(name);
