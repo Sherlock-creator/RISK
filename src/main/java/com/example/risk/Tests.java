@@ -54,7 +54,8 @@ public class Tests {
 		ArrayList<Player> playersList = new ArrayList<>(List.of(playersArray));
 
 		try {
-			Board board = new Board(playersList, filename);
+			Board board = new Board(filename);
+			board.addPlayer(playersList);
 		} catch (Exception e) {
 			throw new AssertionError(e);
 		}

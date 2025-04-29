@@ -14,12 +14,12 @@ public class Player {
 	/**
 	 * Identifying string, can be the player's name
 	 */
-	private String id = "";
+	private String id;
 
 	/**
 	 * Color that represents the player on the board
 	 */
-	private Color color = new Color(0, 0, 0, 0);
+	private Color color;
 
 	/**
 	 * Gives the player's methods access to the board the player's in
@@ -31,19 +31,26 @@ public class Player {
 	//region Constructors
 
 	/**
+	 * Default constructor for stubs, id is "" and color is black
+	 */
+	public Player() {
+		Color color = new Color(0, 0, 0, 0);
+		String id = "";
+	}
+
+	/**
 	 * Standard constructor, directly takes id and color and sets them as private variables
 	 * @param id Identifying string that can be a players name
 	 * @param color Color that will be associated with a players controlled territories
 	 */
-	public Player(String id, Color color){
+	public Player(String id, Color color, Board board){
+		this();
 		this.id = id;
 		this.color = color;
+		this.board = board;
 	}
 
-	/**
-	 * Default constructor for stubs, id is "" and color is black
-	 */
-	public Player() {}
+
 
 	//endregion
 

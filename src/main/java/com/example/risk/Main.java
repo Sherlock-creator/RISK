@@ -14,7 +14,8 @@ public class Main {
 		ArrayList<Player> playersList = new ArrayList<>(List.of(playersArray));
 
 		Board board = new Board();
-		board = new Board(playersList, filename);
+		board = new Board(filename);
+		board.addPlayer(playersList);
 
 		System.out.println(board.getTerritories());
 	}

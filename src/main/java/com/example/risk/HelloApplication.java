@@ -19,15 +19,15 @@ public class HelloApplication extends Application {
 	Territory territory1;
 	Territory territory2;
 
+
 	@Override
 	public void start(Stage stage) throws Exception {
 
 		stage.setTitle("Risk");
 
-		ArrayList<Player> players = new ArrayList<>();
-		players.add(new Player("Player1",new Color(0,0,0,0)));
-		players.add(new Player("Player2",new Color(1,0,0,0)));
-		Board board = new Board(players,"src/TestBoardManual.txt");
+		Board board = new Board("src/TestBoardManual.txt");
+		board.addPlayer("Player1", new Color(0,0,0,0));
+		board.addPlayer("Player2", new Color(1,0,0,0));
 
 		Group group = board.getGroup();
 

@@ -3,6 +3,7 @@ package com.example.risk;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -70,8 +71,7 @@ public class Board {
 	 * <p>Contains all default values that will always be true at the start of a game</p>
 	 */
 	public Board() {
-		Player[] playersArray = new Player[]{new Player(), new Player()};
-		players = new ArrayList<>(List.of(playersArray));
+		players = new ArrayList<>();
 		currentPlayer = players.getFirst();
 		territories = new HashSet<>();
 
@@ -96,31 +96,64 @@ public class Board {
 	/**
 	 * Manual, non-file based constructor, players and territories are directly set as private variables,
 	 * currentPlayer is set as the first player in players
-	 * @param players list of players in the game
 	 * @param territories set of territories that comprise the board
 	 */
-	public Board(ArrayList<Player> players, HashSet<Territory> territories){
+	public Board(HashSet<Territory> territories) {
 		this();
-		this.players = players;
-		currentPlayer = players.getFirst();
 		this.territories = territories;
+
+		troopsToDeploy = currentPlayer.getDeployCount();
 	}
 
 	/**
 	 * <p>File based constructor, reads given filename and parses it to get the list of territories, currentPlayer is
 	 * set as the first player in players </p>
 	 * <p>Contains all things that will be calculated at runtime, like initial troopsToDeploy and players</p>
-	 * @param players List of players in the game
 	 * @param filename Name of file that will be parsed to generate the board
 	 * @throws Exception Throws various exceptions based on what goes wrong during file parsing
 	 */
-	public Board(ArrayList<Player> players, String filename) throws Exception {
+	public Board(String filename) throws Exception {
 		this();
-		this.players = players;
-		currentPlayer = players.getFirst();
 		readBoardFile(filename);
 
 		troopsToDeploy = currentPlayer.getDeployCount();
+	}
+
+	//endregion
+
+	//region Setters
+
+	/**
+	 * Adds the player to this board. If this is the first player added, board will set currentPlayer to it
+	 * @param player the player to add
+	 */
+	public void addPlayer(Player player) {
+		if (players.contains(player)) return;
+		players.add(player);
+		if (players.size() == 1) {
+			currentPlayer = player;
+		}
+	}
+
+	/**
+	 * Creates a player with the given id and color and adds it to the board. If this is the first player added,
+	 * board will set currentPlayer to it
+	 * @param id the player's id
+	 * @param color the player's color
+	 */
+	public void addPlayer(String id, Color color) {
+		addPlayer(new Player(id, color));
+	}
+
+	/**
+	 * Adds all players in the list to the board. If the board previously had no players, currentPlayer will be
+	 * set to the first player in the list
+	 * @param playerList list of players
+	 */
+	public void addPlayer(ArrayList<Player> playerList) {
+		for (Player player : playerList) {
+			addPlayer(player);
+		}
 	}
 
 	//endregion
