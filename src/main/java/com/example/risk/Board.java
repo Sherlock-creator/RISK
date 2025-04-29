@@ -65,16 +65,15 @@ public class Board {
 	//region Constructors
 
 	/**
-	 * Default constructor, players is two default Player objects, territories is initially empty,
-	 * currentPlayer is set as the first player in players
+	 * <p>Default constructor, players is two default Player objects, territories is initially empty,
+	 * currentPlayer is set as the first player in players</p>
+	 * <p>Contains all default values that will always be true at the start of a game</p>
 	 */
 	public Board() {
 		Player[] playersArray = new Player[]{new Player(), new Player()};
 		players = new ArrayList<>(List.of(playersArray));
 		currentPlayer = players.getFirst();
 		territories = new HashSet<>();
-
-		troopsToDeploy = currentPlayer.getDeployCount();
 
 		selectedTerritory = null;
 		phase = "deploy";
@@ -108,8 +107,9 @@ public class Board {
 	}
 
 	/**
-	 * File based constructor, reads given filename and parses it to get the list of territories, currentPlayer is
-	 * set as the first player in players
+	 * <p>File based constructor, reads given filename and parses it to get the list of territories, currentPlayer is
+	 * set as the first player in players </p>
+	 * <p>Contains all things that will be calculated at runtime, like initial troopsToDeploy and players</p>
 	 * @param players List of players in the game
 	 * @param filename Name of file that will be parsed to generate the board
 	 * @throws Exception Throws various exceptions based on what goes wrong during file parsing
@@ -119,6 +119,8 @@ public class Board {
 		this.players = players;
 		currentPlayer = players.getFirst();
 		readBoardFile(filename);
+
+		troopsToDeploy = currentPlayer.getDeployCount();
 	}
 
 	//endregion
