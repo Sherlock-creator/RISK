@@ -89,8 +89,6 @@ public class Board {
 		endTurnButton.relocate(0,50);
 		endTurnButton.setOnAction(e -> onEndTurnButton());
 		endTurnButton.setVisible(false);
-
-		phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase");
 	}
 
 	/**
@@ -102,7 +100,8 @@ public class Board {
 		this();
 		this.territories = territories;
 
-		troopsToDeploy = currentPlayer.getDeployCount();
+		troopsToDeploy = currentPlayer.getDeployCount(this);
+		phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase");
 	}
 
 	/**
@@ -116,7 +115,8 @@ public class Board {
 		this();
 		readBoardFile(filename);
 
-		troopsToDeploy = currentPlayer.getDeployCount();
+		troopsToDeploy = currentPlayer.getDeployCount(this);
+		phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase");
 	}
 
 	//endregion
@@ -230,13 +230,15 @@ public class Board {
 	 */
 	public void onTerritoryButton(Territory territory) {
 		if (phase.equals("deploy")) {
-			territory.addTroops(1);
-			troopsToDeploy--;
+			if (currentPlayer.getControlledTerritories(this).contains(territory)) {
+				territory.addTroops(1);
+				troopsToDeploy--;
 
-			if (troopsToDeploy == 0) {
-				phase = "conquer";
-				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
-				doneButton.setVisible(true);
+				if (troopsToDeploy == 0) {
+					phase = "conquer";
+					phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
+					doneButton.setVisible(true);
+				}
 			}
 
 		} else if (phase.equals("conquer")) {
@@ -261,7 +263,7 @@ public class Board {
 	 */
 	public void onEndTurnButton() {
 		nextPlayer();
-		troopsToDeploy = currentPlayer.getDeployCount();
+		troopsToDeploy = currentPlayer.getDeployCount(this);
 		phase = "deploy";
 		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
 		endTurnButton.setVisible(false);
