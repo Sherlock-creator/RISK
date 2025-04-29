@@ -58,11 +58,11 @@ public class Territory {
 	/**
 	 * Circle for graphics
 	 */
-	private Circle circle = new Circle(x, y, radius);
+	private Circle circle;
 
-	private Button button = new Button();
+	private Button button;
 
-	private Label label = new Label();
+	private Label label;
 
 	//endregion
 
@@ -73,13 +73,12 @@ public class Territory {
 	 */
 	public Territory() {
 		name = "";
-		troops = 0;
+		troops = 1;
 		player = null;
 		board = null;
 		x = 0;
 		y = 0;
 		neighbors = new HashSet<>();
-		troops = 1;
 
 		circle = new Circle(x, y, radius);
 		button = new Button();
