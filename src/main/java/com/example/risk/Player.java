@@ -38,7 +38,7 @@ public class Player {
 	 * @param id Identifying string that can be a players name
 	 * @param color Color that will be associated with a players controlled territories
 	 */
-	public Player(String id, Color color, Board board){
+	public Player(String id, Color color){
 		this();
 		this.id = id;
 		this.color = color;
