@@ -1,5 +1,9 @@
 package com.example.risk;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
@@ -55,6 +59,10 @@ public class Territory {
 	 */
 	private Circle circle = new Circle(x, y, radius);
 
+	private Button menuButton = new Button();
+
+	private TextArea menu = new TextArea();
+
 	//endregion
 
 	//region Constructors
@@ -81,9 +89,32 @@ public class Territory {
 		this.name = name;
 		this.x = x;
 		this.y = y;
+		this.troops = 1;
 
 		neighbors.remove(this); // Just a double check. Normally this should not do anything
 		this.neighbors = neighbors;
+
+		menu.setVisible(false);
+		menu.setEditable(false);
+		menu.setWrapText(true);
+		menu.setMaxSize(100.0,50.0);
+		menu.setLayoutY(y-50);
+		menu.setLayoutX(x-40);
+
+		menuButton.setLayoutY(y);
+		menuButton.setLayoutX(x);
+		menuButton.setText(((Integer)getTroops()).toString());
+		menuButton.setOnAction(e -> {
+			if (menu.isVisible()) {
+				menu.setVisible(false);
+			}
+			else {
+				menu.setText(name + "\n" +
+								"troops: " + troops);
+				menu.setVisible(true);
+			}
+		});
+
 	}
 
 	public Territory() {}
@@ -140,8 +171,22 @@ public class Territory {
 		return neighbors;
 	}
 
+	/**
+	 * @return the reference to the circle representing the territory
+	 */
 	public Circle getCircle() {
 		return circle;
+	}
+
+	/**
+	 * @return the reference to the button tied to the territory
+	 */
+	public Button getMenuButton() {
+		return menuButton;
+	}
+
+	public TextArea getMenu() {
+		return menu;
 	}
 
 	//endregion
@@ -170,6 +215,7 @@ public class Territory {
 	 */
 	public void setTroops(int amt) {
 		this.troops = amt;
+		menuButton.setText(((Integer)troops).toString());
 	}
 
 	public void addNeighbor(Territory neighbor) {
@@ -343,6 +389,7 @@ public class Territory {
 			throw new IllegalArgumentException();
 		}
 		troops += amt;
+		menuButton.setText(((Integer)troops).toString());
 	}
 
 	//endregion

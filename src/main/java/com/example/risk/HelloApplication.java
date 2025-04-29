@@ -7,32 +7,41 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 
 import java.awt.*;
 import java.io.IOException;
-import java.sql.SQLOutput;
+import java.util.HashSet;
+
 
 public class HelloApplication extends Application {
 
-	Button button;
+	Territory territory1;
+	Territory territory2;
 
 	@Override
 	public void start(Stage stage) throws IOException {
-//		FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-//		Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-//		stage.setTitle("Hello!");
-//		stage.setScene(scene);
-//		stage.show();
 		stage.setTitle("Risk");
-		button = new Button();
-		button.setText("This Is a Button");
-		button.setOnAction(e -> System.out.println("balls"));
+		HashSet<Territory> set1 = new HashSet<>();
+		set1.add(territory2);
+		HashSet<Territory> set2 = new HashSet<>();
+		set2.add(territory1);
+
+		territory1 = new Territory("test1",200,200, set1);
+		territory2 = new Territory("test2", 300, 300, set2);
+
+		Button addTroops = new Button("add 5 troops");
+		addTroops.setOnAction(e -> territory1.addTroops(5));
 
 		Group layout = new Group();
-		layout.getChildren().add(button);
+		layout.getChildren().add(territory1.getMenuButton());
+		layout.getChildren().add(territory1.getMenu());
+		layout.getChildren().add(addTroops);
+
+		layout.getChildren().add(territory2.getMenuButton());
+		layout.getChildren().add(territory2.getMenu());
 
 		Scene scene = new Scene(layout,500,500);
 		stage.setScene(scene);
