@@ -2,6 +2,7 @@ package com.example.risk;
 
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,7 +41,7 @@ public class Board {
 	/**
 	 * Represents what part of the turn you're in
 	 */
-	private String state;
+	private String phase;
 
 	/**
 	 * During the "conquer" state, allows you to move on to the "move" state
@@ -51,6 +52,13 @@ public class Board {
 	 * During the "move" state, allows you to move on to the next players turn
 	 */
 	private Button endTurnButton;
+
+	/**
+	 * Represents the phase a players turn is in
+	 */
+	private Label phaseName;
+
+	private int troopsToDeploy;
 
 	//endregion
 
@@ -66,18 +74,24 @@ public class Board {
 		currentPlayer = players.getFirst();
 		territories = new HashSet<>();
 
+		troopsToDeploy = currentPlayer.getDeployCount();
+
 		selectedTerritory = null;
-		state = "deploy";
+		phase = "deploy";
 
 		doneButton = new Button();
 		doneButton.setText("Done");
 		doneButton.relocate(0,0);
 		doneButton.setOnAction(e -> onDoneButton());
+		doneButton.setVisible(false);
 
 		endTurnButton = new Button();
 		endTurnButton.setText("End Turn");
 		endTurnButton.relocate(0,50);
 		endTurnButton.setOnAction(e -> onEndTurnButton());
+		endTurnButton.setVisible(false);
+
+		phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase");
 	}
 
 	/**
@@ -173,21 +187,42 @@ public class Board {
 	 * @param territory the territory that the button was clicked on
 	 */
 	public void onTerritoryButton(Territory territory) {
-		//TODO
+		if (phase.equals("deploy")) {
+			territory.addTroops(1);
+			troopsToDeploy--;
+
+			if (troopsToDeploy == 0) {
+				phase = "conquer";
+				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
+				doneButton.setVisible(true);
+			}
+
+		} else if (phase.equals("conquer")) {
+			//TODO
+		} else if (phase.equals("move")){
+
+		}
 	}
 
 	/**
 	 * Ends the "conquer" phase and moves to the "move" phase
 	 */
 	public void onDoneButton() {
-		//TODO
+		phase = "move";
+		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
+		doneButton.setVisible(false);
+		endTurnButton.setVisible(true);
 	}
 
 	/**
 	 * Ends the turn and moves to the next person, going to the "deploy" phase if the player has any troops to deploy
 	 */
 	public void onEndTurnButton() {
-		//TODO
+		nextPlayer();
+		troopsToDeploy = currentPlayer.getDeployCount();
+		phase = "deploy";
+		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
+		endTurnButton.setVisible(false);
 	}
 
 	//endregion
