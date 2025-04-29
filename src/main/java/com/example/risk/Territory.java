@@ -117,17 +117,7 @@ public class Territory {
 
 		button.relocate(x, y);
 		button.setText(((Integer)getTroops()).toString());
-		button.setOnAction(e -> {
-			if (label.isVisible()) {
-				label.setVisible(false);
-			}
-			else {
-				label.setText(name + "\n" +
-								"troops: " + troops);
-				label.setVisible(true);
-			}
-		});
-
+		button.setOnAction(e -> board.onTerritoryButton(this));
 	}
 
 	//endregion
@@ -404,7 +394,7 @@ public class Territory {
 
 	//endregion
 
-	//region Button Logic
+	//region Buttons
 
 
 

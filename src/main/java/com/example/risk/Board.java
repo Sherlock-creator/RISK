@@ -1,5 +1,8 @@
 package com.example.risk;
 
+import javafx.scene.Group;
+import javafx.scene.control.Button;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -29,9 +32,53 @@ public class Board {
 	 */
 	private HashSet<Territory> territories;
 
+	/**
+	 * Reference to the currently selected territory
+	 */
+	private Territory selectedTerritory;
+
+	/**
+	 * Represents what part of the turn you're in
+	 */
+	private String state;
+
+	/**
+	 * During the "conquer" state, allows you to move on to the "move" state
+	 */
+	private Button doneButton;
+
+	/**
+	 * During the "move" state, allows you to move on to the next players turn
+	 */
+	private Button endTurnButton;
+
 	//endregion
 
 	//region Constructors
+
+	/**
+	 * Default constructor, players is two default Player objects, territories is initially empty,
+	 * currentPlayer is set as the first player in players
+	 */
+	public Board() {
+		Player[] playersArray = new Player[]{new Player(), new Player()};
+		players = new ArrayList<>(List.of(playersArray));
+		currentPlayer = players.getFirst();
+		territories = new HashSet<>();
+
+		selectedTerritory = null;
+		state = "deploy";
+
+		doneButton = new Button();
+		doneButton.setText("Done");
+		doneButton.relocate(0,0);
+		doneButton.setOnAction(e -> onDoneButton());
+
+		endTurnButton = new Button();
+		endTurnButton.setText("End Turn");
+		endTurnButton.relocate(0,50);
+		endTurnButton.setOnAction(e -> onEndTurnButton());
+	}
 
 	/**
 	 * Manual, non-file based constructor, players and territories are directly set as private variables,
@@ -40,20 +87,10 @@ public class Board {
 	 * @param territories set of territories that comprise the board
 	 */
 	public Board(ArrayList<Player> players, HashSet<Territory> territories){
+		this();
 		this.players = players;
 		currentPlayer = players.getFirst();
 		this.territories = territories;
-	}
-
-	/**
-	 * Default constructor for stubs, players is two default Player objects, territories is initially empty,
-	 * currentPlayer is set as the first player in players
-	 */
-	public Board() {
-		Player[] playersArray = new Player[]{new Player(), new Player()};
-		players = new ArrayList<>(List.of(playersArray));
-		territories = new HashSet<>();
-		currentPlayer = players.getFirst();
 	}
 
 	/**
@@ -64,6 +101,7 @@ public class Board {
 	 * @throws Exception Throws various exceptions based on what goes wrong during file parsing
 	 */
 	public Board(ArrayList<Player> players, String filename) throws Exception {
+		this();
 		this.players = players;
 		currentPlayer = players.getFirst();
 		readBoardFile(filename);
@@ -97,6 +135,11 @@ public class Board {
 		return currentPlayer;
 	}
 
+	public Group getGroup() {
+		//TODO
+		return new Group();
+	}
+
 	//endregion
 
 	//region Game Logic
@@ -122,14 +165,34 @@ public class Board {
 
 	//endregion
 
+	//region Buttons
+
 	/**
-	 * Loops through all territories and draws them on the map
+	 * Advances game logic based on what territory's button was clicked
+	 * Varies based on what phase you're in
+	 * @param territory the territory that the button was clicked on
 	 */
-	public void drawAll() {
-		for (Territory territory : territories) {
-			territory.draw();
-		}
+	public void onTerritoryButton(Territory territory) {
+		//TODO
 	}
+
+	/**
+	 * Ends the "conquer" phase and moves to the "move" phase
+	 */
+	public void onDoneButton() {
+		//TODO
+	}
+
+	/**
+	 * Ends the turn and moves to the next person, going to the "deploy" phase if the player has any troops to deploy
+	 */
+	public void onEndTurnButton() {
+		//TODO
+	}
+
+	//endregion
+
+	//region Read Board File
 
 	/**
 	 * <p>Opens and interprets a board file of the given filename.</p>
@@ -192,12 +255,10 @@ public class Board {
 			}
 
 			// Add neighbors
-			ArrayList<String> neighborStrings = new ArrayList<>();
-			;
 			if (mode.equals("ManualNeighbors")) { // Parse neighbor names
 				lineScanner.useDelimiter(",");
 				while (lineScanner.hasNext()) {
-					neighborStrings.add(lineScanner.next());
+					neighborMap.get(name).add(lineScanner.next());
 				}
 
 			}
@@ -221,4 +282,7 @@ public class Board {
 			//TODO optional, make a system for automatically adding neighbors based on range variable
 		}
 	}
+
+	//endregion
+
 }
