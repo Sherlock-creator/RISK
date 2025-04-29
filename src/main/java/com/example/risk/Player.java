@@ -21,11 +21,6 @@ public class Player {
 	 */
 	private Color color = new Color(0, 0, 0, 0);
 
-	/**
-	 * Gives the player's methods access to the board the player's in
-	 */
-	private Board board;
-
 	//endregion
 
 	//region Constructors
@@ -69,11 +64,11 @@ public class Player {
 	 * Fetches from the main board which territories are controlled by the player
 	 * @return set of controlled territories
 	 */
-	public HashSet<Territory> getControlledTerritories(){
+	public HashSet<Territory> getControlledTerritories(Board board){
 		HashSet<Territory> controlled = new HashSet<>();
 
 		for (Territory t : board.getTerritories()) {
-			if (t.getPlayer().id.equals(id)) {
+			if (!(t.getPlayer() == null) && t.getPlayer().id.equals(id)) {
 				controlled.add(t);
 			}
 		}
@@ -84,9 +79,9 @@ public class Player {
 	 * Calculates how many total troops the player can deploy this turn
 	 * @return number of troops
 	 */
-	public int getDeployCount(){
+	public int getDeployCount(Board board){
 		int troops = 3;
-		troops += getControlledTerritories().size() / 3;
+		troops += getControlledTerritories(board).size() / 3;
 		return troops;
 	}
 
