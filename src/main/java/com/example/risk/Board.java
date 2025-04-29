@@ -150,8 +150,15 @@ public class Board {
 	}
 
 	public Group getGroup() {
-		//TODO
-		return new Group();
+		Group basement = new Group();
+
+		// for each territory, add its button and label to the group
+		for (Territory territory : territories) {
+			basement.getChildren().add(territory.getButton()); // Why yes, I did call this variable basement purely
+			basement.getChildren().add(territory.getLabel());  // so I could call basement.getChildren()
+		}
+
+		return basement;
 	}
 
 	//endregion
@@ -299,7 +306,7 @@ public class Board {
 			}
 
 			// Create Territory object, add it to this board's list
-			Territory territory = new Territory(name, x, y);
+			Territory territory = new Territory(name, x, y, this);
 			territories.add(territory);
 			nameMap.put(name, territory);
 		}
