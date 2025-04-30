@@ -250,6 +250,8 @@ public class Board {
 	 * Sets currentPlayer to the next player in players
 	 */
 	public void nextPlayer() {
+		//Indexes through the list of players
+		//If it goes out of bounds, set current players to the first player
 		try {
 			currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
 		} catch (IndexOutOfBoundsException e) {
@@ -389,6 +391,9 @@ public class Board {
 		cancelButton.setVisible(false);
 	}
 
+	/**
+	 * Advances the phase of the game and sets the board state to the next phase
+	 */
 	private void nextPhase() {
 		switch (phase) {
 			//sets up the board to the conquer phase
