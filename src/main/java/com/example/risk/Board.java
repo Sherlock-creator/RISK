@@ -92,7 +92,7 @@ public class Board {
 		territories = new HashSet<>();
 
 		selectedTerritory = null;
-		phase = "deploy";
+		phase = "setup";
 
 		doneButton = new Button("Done");
 		doneButton.relocate(0,50);
@@ -278,7 +278,7 @@ public class Board {
 		}
 
 		//Sets up the beginning game state now that territories are assigned
-		troopsToDeploy = currentPlayer.getDeployCount(this);
+		troopsToDeploy = territories.size();
 		phaseName = new Label(String.format("%s's %s phase\n%d troops left", currentPlayer.getId(), phase, troopsToDeploy));
 	}
 
@@ -361,6 +361,20 @@ public class Board {
 					selectedTerritory = null;
 				}
 			}
+			//allows all players to make there initial troop placements
+			case "setup" -> {
+				// like the deploy phase, but instead of advancing phases it remains here till all players have gone.
+				// Click on territories to add 1 troop at a time until you have no more deployable troops
+				if (currentPlayer.equals(territory.getPlayer())) {
+					territory.addTroops(1);
+					troopsToDeploy--;
+					phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+
+					if (troopsToDeploy == 0) {
+						nextPhase();
+					}
+				}
+			}
 		}
 	}
 
@@ -377,6 +391,7 @@ public class Board {
 
 	private void nextPhase() {
 		switch (phase) {
+			//sets up the board to the conquer phase
 			case "deploy" -> {
 				phase = "conquer";
 				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
@@ -387,6 +402,7 @@ public class Board {
 					nextPhase();
 				}
 			}
+			//sets up the board to the move phase
 			case "conquer" -> {
 				cancelButton.setVisible(false);
 				if (selectedTerritory != null) {
@@ -403,6 +419,7 @@ public class Board {
 					nextPhase();
 				}
 			}
+			//sets up the board to the move phase for the next players turn
 			case "move" -> {
 				cancelButton.setVisible(false);
 				if (selectedTerritory != null) {
@@ -427,6 +444,20 @@ public class Board {
 						nextPlayer();
 						removePlayer(tmp);
 					}
+				}
+			}
+			//sets the board to the deployment phase for the first player turn
+			case "setup" -> {
+				nextPlayer();
+				//Checks if all the players have had there set up turn
+				//If so then the normal deploy phase occurs
+				if (currentPlayer.equals(players.getFirst())) {
+					phase = "deploy";
+					troopsToDeploy = currentPlayer.getDeployCount(this);
+					phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+				} else {
+					troopsToDeploy = territories.size();
+					phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 				}
 			}
 		}
