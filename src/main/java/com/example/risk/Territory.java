@@ -349,7 +349,7 @@ public class Territory {
 		int defenderDice;
 
 		//sets attacker dice total
-		attackerDice = Math.min(troops, 3);
+		attackerDice = Math.min(troops - 1, 3);
 
 		//sets defender dice total
 		defenderDice = Math.min(defender.troops, 2);
