@@ -60,7 +60,15 @@ public class Board {
 	 */
 	private Label phaseName;
 
+	/**
+	 * Holds the number of troops the current player has left to deploy in the deployment phase
+	 */
 	private int troopsToDeploy;
+
+	/**
+	 * During the conquer phase, this button will allow the current player to deselect the territory they are using to attack with
+	 */
+	private Button cancelButton;
 
 	//endregion
 
@@ -78,17 +86,20 @@ public class Board {
 		selectedTerritory = null;
 		phase = "deploy";
 
-		doneButton = new Button();
-		doneButton.setText("Done");
-		doneButton.relocate(0,0);
+		doneButton = new Button("Done");
+		doneButton.relocate(0,50);
 		doneButton.setOnAction(e -> onDoneButton());
 		doneButton.setVisible(false);
 
-		endTurnButton = new Button();
-		endTurnButton.setText("End Turn");
+		endTurnButton = new Button("End Turn");
 		endTurnButton.relocate(0,50);
 		endTurnButton.setOnAction(e -> onEndTurnButton());
 		endTurnButton.setVisible(false);
+
+		cancelButton = new Button("Cancel");
+		cancelButton.relocate(0,50);
+		cancelButton.setOnAction(e -> onCancelButton());
+		cancelButton.setVisible(false);
 	}
 
 	/**
@@ -241,7 +252,7 @@ public class Board {
 	public void onTerritoryButton(Territory territory) {
 		if (phase.equals("deploy")) {
 			phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
-			if (currentPlayer.getControlledTerritories(this).contains(territory)) {
+			if (currentPlayer.equals(territory.getPlayer())) {
 				territory.addTroops(1);
 				troopsToDeploy--;
 
@@ -253,9 +264,22 @@ public class Board {
 			}
 
 		} else if (phase.equals("conquer")) {
-			//TODO
+			if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
+				selectedTerritory = territory;
+				cancelButton.setVisible(true);
+			} else if (!(currentPlayer.equals(territory.getPlayer())) && selectedTerritory != null) {
+				try {
+					selectedTerritory.conquer(territory);
+				} catch (Exception _){}
+				selectedTerritory = null;
+			}
 		} else if (phase.equals("move")){
-
+			if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
+				selectedTerritory = territory;
+			} else if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory != null) {
+				selectedTerritory.moveTroops(territory, selectedTerritory.getTroops() - 1);
+				selectedTerritory = null;
+			}
 		}
 	}
 
@@ -278,6 +302,14 @@ public class Board {
 		phase = "deploy";
 		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
 		endTurnButton.setVisible(false);
+	}
+
+	/**
+	 * deselects the territory that is currently selected
+	 */
+	public void onCancelButton() {
+		selectedTerritory = null;
+		cancelButton.setVisible(false);
 	}
 
 	//endregion
