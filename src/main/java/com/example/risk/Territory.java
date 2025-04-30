@@ -310,7 +310,7 @@ public class Territory {
 	 * @param defender Territory to wage war on
 	 * @throws Exception if t is not a neighbor of this territory
 	 */
-	public void conquer(Territory defender) throws Exception{
+	public boolean conquer(Territory defender) throws Exception{
 		if (!canConquer(defender)) {
 			throw new Exception();
 		}
@@ -356,10 +356,11 @@ public class Territory {
 			defender.addTroops(defenderLosses);
 		}catch (IllegalArgumentException e) {
 			defender.setPlayer(player);
-			defender.addTroops(this.getTroops() - 1);
+			defender.addTroops(this.getTroops() - 2);
 			addTroops(-1 * (this.getTroops() - 1));
+			return true;
 		}
-
+		return false;
 	}
 
 	/**
