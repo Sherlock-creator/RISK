@@ -269,6 +269,26 @@ public class Board {
 		phaseName = new Label(String.format("%s's %s phase\n%d troops left", currentPlayer.getId(), phase, troopsToDeploy));
 	}
 
+	/**
+	 * Checks whether the given player can move from any territory to any territory
+	 * @param player the player to check
+	 * @return whether the given player can move
+	 */
+	private boolean canMove(Player player) {
+		//TODO this will not always return true, of course
+		return true;
+	}
+
+	/**
+	 * Checks whether the given player can conquer any territories
+	 * @param player the player to check
+	 * @return whether the player can conquer
+	 */
+	private boolean canConquer(Player player) {
+		//TODO this will not always return true, of course
+		return true;
+	}
+
 	//endregion
 
 	//region Buttons
@@ -302,8 +322,7 @@ public class Board {
 						if (success) {
 							selectedTerritory = null;
 						}
-					} catch (Exception _) {
-					}
+					} catch (Exception _) {}
 				}
 			}
 			case "move" -> {
@@ -345,6 +364,11 @@ public class Board {
 				phase = "conquer";
 				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
 				doneButton.setVisible(true);
+
+				// Skips to the phase after "conquer" if the player cannot conquer any territories
+				if (!canConquer(currentPlayer)) {
+					nextPhase();
+				}
 			}
 			case "conquer" -> {
 				cancelButton.setVisible(false);
@@ -353,6 +377,11 @@ public class Board {
 				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
 				doneButton.setVisible(false);
 				endTurnButton.setVisible(true);
+
+				// Skips to the phase after "move" if the player cannot move any troops
+				if (!canMove(currentPlayer)) {
+					nextPhase();
+				}
 			}
 			case "move" -> {
 				cancelButton.setVisible(false);
