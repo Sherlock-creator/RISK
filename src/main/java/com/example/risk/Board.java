@@ -193,6 +193,10 @@ public class Board {
 		return currentPlayer;
 	}
 
+	/**
+	 * Gets a group of all gui objects contained in this board
+	 * @return a group of nodes
+	 */
 	public Group getGroup() {
 		Group basement = new Group();
 
@@ -228,17 +232,6 @@ public class Board {
 		return basement;
 	}
 
-	public void assignTerritories() {
-		int numLoops = 0;
-		for (Territory territory : territories) {
-			territory.setPlayer(players.get((numLoops % players.size())));
-			numLoops++;
-		}
-
-		troopsToDeploy = currentPlayer.getDeployCount(this);
-		phaseName = new Label(String.format("%s's %s phase\n%d troops left", currentPlayer.getId(), phase, troopsToDeploy));
-	}
-
 	//endregion
 
 	//region Game Logic
@@ -260,6 +253,20 @@ public class Board {
 	 */
 	public void removePlayer(Player player) {
 		players.remove(player);
+	}
+
+	/**
+	 * Randomly assigns each player territories so all the territories are controlled
+	 */
+	public void assignTerritories() {
+		int numLoops = 0;
+		for (Territory territory : territories) {
+			territory.setPlayer(players.get((numLoops % players.size())));
+			numLoops++;
+		}
+
+		troopsToDeploy = currentPlayer.getDeployCount(this);
+		phaseName = new Label(String.format("%s's %s phase\n%d troops left", currentPlayer.getId(), phase, troopsToDeploy));
 	}
 
 	//endregion
