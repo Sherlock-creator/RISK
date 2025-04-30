@@ -438,7 +438,6 @@ public class Board {
 					territory.removeNeighbor(farthest);
 				}
 
-				territory.getNeighbors().size();
 			}
 		}
 
