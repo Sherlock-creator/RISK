@@ -1,0 +1,17 @@
+AutomaticNeighbors
+120 3
+Allentown 100 100
+Emmaus 80 160
+Coopersburg 150 170
+Pennsburg 80 250
+Quakertown 180 220
+Hellertown 200 110
+Ottsville 280 170
+Perkasie 200 280
+Souderton 140 330
+Harleysville 90 380
+New_Hope 350 250
+Doylestown 280 310
+Warrington 280 370
+Lansdale 200 400
+Newtown 370 350

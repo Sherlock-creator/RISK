@@ -30,7 +30,7 @@ public class Territory {
 	/**
 	 * Width of all territory buttons
 	 */
-	static final private double BUTTON_WIDTH = 25;
+	static final private double BUTTON_WIDTH = 30;
 
 	/**
 	 * Height of all territory buttons
