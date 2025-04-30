@@ -243,10 +243,10 @@ public class Board {
 	 * Sets currentPlayer to the next player in players
 	 */
 	public void nextPlayer() {
-		for (int i = 0; i < players.size(); i++) {
-			if (currentPlayer == players.get(i)) {
-				currentPlayer = players.get((i+1) % players.size());
-			}
+		try {
+			currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			currentPlayer = players.getFirst();
 		}
 	}
 
