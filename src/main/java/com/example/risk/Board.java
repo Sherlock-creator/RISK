@@ -1,9 +1,11 @@
 package com.example.risk;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
 
 import java.io.File;
@@ -193,6 +195,7 @@ public class Board {
 		Group basement = new Group();
 
 		// for each territory, add its button and label to the group
+		ArrayList<Node> buttonLableList = new ArrayList<>();
 		ArrayList<Territory> territoryArrayList = new ArrayList<>(territories);
 		for (int i = 0; i < territories.size(); i++) {
 			Territory territory = territoryArrayList.get(i);
@@ -204,9 +207,11 @@ public class Board {
 				}
 			}
 
-			basement.getChildren().add(territory.getButton()); // Why yes, I did call this variable basement purely
-			basement.getChildren().add(territory.getLabel());  // so I could call basement.getChildren() -Noah Jones
+			buttonLableList.add(territory.getButton()); // Why yes, I did call this variable basement purely
+			buttonLableList.add(territory.getLabel());  // so I could call basement.getChildren() -Noah Jones
 		}
+
+		basement.getChildren().addAll(buttonLableList);
 
 		basement.getChildren().add(endTurnButton);
 		basement.getChildren().add(doneButton);
@@ -377,9 +382,12 @@ public class Board {
 		// Map that will allow for accessing territories by name
 		HashMap<String, Territory> nameMap = new HashMap<>();
 
-		// Loop through list of territories
+		// Parse list of territories
+		String nextLine = "";
 		while (scanner.hasNextLine()) {
-			Scanner lineScanner = new Scanner(scanner.nextLine());
+			nextLine = scanner.nextLine();
+			if (nextLine.equals("Exclude") && mode.equals("AutomaticNeighbors")) break; // Exit loop and switch to exclude parsing mode
+			Scanner lineScanner = new Scanner(nextLine);
 
 			// Parse name
 			String name = lineScanner.next();
@@ -407,6 +415,19 @@ public class Board {
 			Territory territory = new Territory(name, x, y, this);
 			territories.add(territory);
 			nameMap.put(name, territory);
+		}
+
+		// Exclude parsing
+		ArrayList<ArrayList<String>> excludes = new ArrayList<>();
+		if (nextLine.equals("Exclude") && mode.equals("AutomaticNeighbors")) {
+			while (scanner.hasNextLine()) {
+				Scanner lineScanner = new Scanner(scanner.nextLine());
+
+				ArrayList<String> exclude = new ArrayList<>();
+				exclude.add(lineScanner.next());
+				exclude.add(lineScanner.next());
+				excludes.add(exclude);
+			}
 		}
 
 		// Add neighbors to each territory
@@ -438,6 +459,16 @@ public class Board {
 					territory.removeNeighbor(farthest);
 				}
 
+				// Removes specifically excluded connections after everything is done
+				for (ArrayList<String> exclude : excludes) {
+					ArrayList<Territory> removes = new ArrayList<>();
+					for (Territory neighbor : territory.getNeighbors()) {
+						if (exclude.contains(territory.getName()) && exclude.contains(neighbor.getName())) {
+							removes.add(neighbor);
+						}
+					}
+					territory.getNeighbors().removeAll(removes);
+				}
 			}
 		}
 

@@ -7,3 +7,5 @@ Pennsburg 100 200
 Quakertown 200 200
 Paletown 250 210
 Perkasie 300 250
+Exclude
+Quakertown Perkasie
