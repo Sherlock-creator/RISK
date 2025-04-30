@@ -13,6 +13,30 @@ import java.util.Random;
  */
 public class Territory {
 
+	//region Constants
+
+	/**
+	 * Width of all territory labels
+	 */
+	static final private double LABEL_WIDTH = 50;
+
+	/**
+	 * Height of all territory labels
+	 */
+	static final private double LABEL_HEIGHT = 20;
+
+	/**
+	 * Width of all territory buttons
+	 */
+	static final private double BUTTON_WIDTH = 25;
+
+	/**
+	 * Height of all territory buttons
+	 */
+	static final private double BUTTON_HEIGHT = 20;
+
+	//endregion
+
 	//region Variables
 
 	/**
@@ -103,7 +127,9 @@ public class Territory {
 		label.relocate(x, y-20);
 		label.setText(name);
 
-		button.relocate(x, y);
+		button.setPrefWidth(BUTTON_WIDTH);
+		button.setPrefHeight(BUTTON_HEIGHT);
+		button.relocate(x-BUTTON_WIDTH/2, y-BUTTON_HEIGHT/2);
 		button.setText(((Integer)getTroops()).toString());
 		button.setOnAction(e -> board.onTerritoryButton(this));
 	}

@@ -202,7 +202,15 @@ public class Board {
 			for (int j = i+1; j < territories.size(); j++) {
 				Territory other = territoryArrayList.get(j);
 				if (territory.getNeighbors().contains(other)) {
-					basement.getChildren().add(new Line(territory.getX(),territory.getY(),other.getX(),other.getY()));
+					double LINE_OFFSET_X = 0;
+					double LINE_OFFSET_Y = 0;
+					basement.getChildren().add(new Line(territory.getX()+LINE_OFFSET_X,territory.getY()+LINE_OFFSET_Y,other.getX()+LINE_OFFSET_X,other.getY()+LINE_OFFSET_Y));
+					//basement.getChildren().add(new Line(
+					//		territory.getX()+territory.getButton().getWidth()/2,
+					//		territory.getY()+territory.getButton().getHeight()/2,
+					//		other.getX()+other.getButton().getWidth()/2,
+					//		other.getY()+other.getButton().getHeight()/2
+					//));
 				}
 			}
 
