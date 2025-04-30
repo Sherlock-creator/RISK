@@ -282,6 +282,7 @@ public class Board {
 		//Sets up the beginning game state now that territories are assigned
 		troopsToDeploy = territories.size();
 		phaseName = new Label(String.format("%s's %s phase\n%d troops left", currentPlayer.getId(), phase, troopsToDeploy));
+		phaseName.setTextFill(currentPlayer.getColor());
 	}
 
 	/**
@@ -345,6 +346,7 @@ public class Board {
 							//If so, it pops up a win screen
 							if (currentPlayer.getControlledTerritories(this).size() == territories.size()){
 								winScreen.setText(currentPlayer.getId() + " Wins!");
+								winScreen.setTextFill(currentPlayer.getColor());
 								winScreen.setVisible(true);
 							}
 						}
@@ -371,6 +373,7 @@ public class Board {
 					territory.addTroops(1);
 					troopsToDeploy--;
 					phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+					phaseName.setTextFill(currentPlayer.getColor());
 
 					if (troopsToDeploy == 0) {
 						nextPhase();
@@ -400,6 +403,7 @@ public class Board {
 			case "deploy" -> {
 				phase = "conquer";
 				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
+
 				doneButton.setVisible(true);
 
 				// Skips to the phase after "conquer" if the player cannot conquer any territories
@@ -441,6 +445,7 @@ public class Board {
 						troopsToDeploy = currentPlayer.getDeployCount(this);
 						phase = "deploy";
 						phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+						phaseName.setTextFill(currentPlayer.getColor());
 						endTurnButton.setVisible(false);
 						nextPlayerFound = true;
 					} else {
@@ -460,9 +465,12 @@ public class Board {
 					phase = "deploy";
 					troopsToDeploy = currentPlayer.getDeployCount(this);
 					phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+					phaseName.setTextFill(currentPlayer.getColor());
+
 				} else {
 					troopsToDeploy = territories.size();
 					phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+					phaseName.setTextFill(currentPlayer.getColor());
 				}
 			}
 		}
