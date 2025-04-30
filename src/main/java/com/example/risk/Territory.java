@@ -124,7 +124,7 @@ public class Territory {
 		this.y = y;
 		this.board = board;
 
-		label.relocate(x, y-20);
+		label.relocate(x-10, y-30);
 		label.setText(name);
 
 		button.setPrefWidth(BUTTON_WIDTH);

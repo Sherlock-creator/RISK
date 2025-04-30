@@ -1,8 +1,8 @@
 ManualNeighbors
 Allentown 100 100 Coopersburg Macungie
-Macungie 150 50 Allentown Coopersburg
+Macungie 150 50 Allentown Coopersburg Pennsburg
 Coopersburg 150 150 Allentown Macungie Quakertown
-Pennsburg 100 200 Quakertown Macungie Perkasie
-Quakertown 200 200 Coopersburg Pennsburg
-Paletown 250 210 Quakertown Perkasie
+Pennsburg 250 100 Quakertown Macungie Perkasie
+Quakertown 200 200 Coopersburg Pennsburg Paletown
+Paletown 250 220 Quakertown Perkasie
 Perkasie 300 250 Pennsburg Paletown
