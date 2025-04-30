@@ -88,12 +88,12 @@ public class Board {
 
 		doneButton = new Button("Done");
 		doneButton.relocate(0,50);
-		doneButton.setOnAction(e -> onDoneButton());
+		doneButton.setOnAction(e -> nextPhase());
 		doneButton.setVisible(false);
 
 		endTurnButton = new Button("End Turn");
 		endTurnButton.relocate(0,50);
-		endTurnButton.setOnAction(e -> onEndTurnButton());
+		endTurnButton.setOnAction(e -> nextPhase());
 		endTurnButton.setVisible(false);
 
 		cancelButton = new Button("Cancel");
@@ -341,20 +341,6 @@ public class Board {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Ends the "conquer" phase and moves to the "move" phase
-	 */
-	public void onDoneButton() {
-		nextPhase();
-	}
-
-	/**
-	 * Ends the turn and moves to the next person, going to the "deploy" phase if the player has any troops to deploy
-	 */
-	public void onEndTurnButton() {
-		nextPhase();
 	}
 
 	/**
