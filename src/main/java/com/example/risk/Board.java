@@ -205,7 +205,7 @@ public class Board {
 			}
 
 			basement.getChildren().add(territory.getButton()); // Why yes, I did call this variable basement purely
-			basement.getChildren().add(territory.getLabel());  // so I could call basement.getChildren()
+			basement.getChildren().add(territory.getLabel());  // so I could call basement.getChildren() -Noah Jones
 		}
 
 		basement.getChildren().add(endTurnButton);
@@ -236,7 +236,7 @@ public class Board {
 	 */
 	public void nextPlayer() {
 		for (int i = 0; i < players.size(); i++) {
-			if (currentPlayer == players.get(i)) {
+			if (currentPlayer.equals(players.get(i))) {
 				currentPlayer = players.get((i+1) % players.size());
 			}
 		}
@@ -279,7 +279,10 @@ public class Board {
 				cancelButton.setVisible(true);
 			} else if (!(currentPlayer.equals(territory.getPlayer())) && selectedTerritory != null) {
 				try {
-					selectedTerritory.conquer(territory);
+					boolean success = selectedTerritory.conquer(territory);
+					if (success) {
+						selectedTerritory = null;
+					}
 				} catch (Exception _){}
 			}
 		} else if (phase.equals("move")){
@@ -296,6 +299,8 @@ public class Board {
 	 * Ends the "conquer" phase and moves to the "move" phase
 	 */
 	public void onDoneButton() {
+		cancelButton.setVisible(false);
+		selectedTerritory = null;
 		phase = "move";
 		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
 		doneButton.setVisible(false);
@@ -306,6 +311,8 @@ public class Board {
 	 * Ends the turn and moves to the next person, going to the "deploy" phase if the player has any troops to deploy
 	 */
 	public void onEndTurnButton() {
+		cancelButton.setVisible(false);
+		selectedTerritory = null;
 		nextPlayer();
 		troopsToDeploy = currentPlayer.getDeployCount(this);
 		phase = "deploy";
