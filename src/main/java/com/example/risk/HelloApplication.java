@@ -2,17 +2,9 @@ package com.example.risk;
 
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.PointLight;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 
 public class HelloApplication extends Application {
 
