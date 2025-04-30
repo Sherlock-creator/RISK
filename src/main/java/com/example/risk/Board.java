@@ -5,9 +5,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
 
+import java.awt.event.PaintEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -207,6 +209,8 @@ public class Board {
 				}
 			}
 
+			basement.getChildren().add(territory.getCircle());
+
 			buttonLableList.add(territory.getButton()); // Why yes, I did call this variable basement purely
 			buttonLableList.add(territory.getLabel());  // so I could call basement.getChildren() -Noah Jones
 		}
@@ -287,6 +291,7 @@ public class Board {
 					boolean success = selectedTerritory.conquer(territory);
 					if (success) {
 						selectedTerritory = null;
+						cancelButton.setVisible(false);
 					}
 				} catch (Exception _){}
 			}

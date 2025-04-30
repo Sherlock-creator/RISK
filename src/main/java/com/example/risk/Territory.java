@@ -77,7 +77,7 @@ public class Territory {
 	/**
 	 * Radius, is the same for all circles
 	 */
-	static private double radius = 100;
+	static private double radius = 25;
 
 	/**
 	 * Circle for graphics
@@ -104,7 +104,7 @@ public class Territory {
 		y = 0;
 		neighbors = new HashSet<>();
 
-		circle = new Circle(x, y, radius);
+		circle = new Circle();
 		button = new Button();
 		label = new Label();
 	}
@@ -123,6 +123,8 @@ public class Territory {
 		this.x = x;
 		this.y = y;
 		this.board = board;
+
+		circle = new Circle(x, y, radius);
 
 		label.relocate(x-10, y-30);
 		label.setText(name);
@@ -226,6 +228,7 @@ public class Territory {
 	 */
 	public void setPlayer(Player player) {
 		this.player = player;
+		circle.setFill((player.getColor()));
 	}
 
 	/**
@@ -320,7 +323,7 @@ public class Territory {
 	 */
 	public boolean conquer(Territory defender) throws Exception{
 		if (!canConquer(defender)) {
-			throw new Exception();
+			return false;
 		}
 
 		int attackerDice;
@@ -399,6 +402,9 @@ public class Territory {
 	 */
 	public boolean canConquer(Territory defender) {
 		//loops through the territories neighbors and checks if t is one of them
+		if (this.troops <= 1) {
+			return false;
+		}
 		for (Territory territory : neighbors) {
 			if (territory == defender) {
 				return true;

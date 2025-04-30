@@ -26,8 +26,8 @@ public class HelloApplication extends Application {
 		stage.setTitle("Risk");
 
 		Board board = new Board("src/TestBoardAutomatic.txt");
-		board.addPlayer("Player1", new Color(0,0,0,0));
-		board.addPlayer("Player2", new Color(1,0,0,0));
+		board.addPlayer("Player1", new Color(0,.5,1,.9));
+		board.addPlayer("Player2", new Color(1,0,0,.9));
 
 		board.assignTerritories();
 
