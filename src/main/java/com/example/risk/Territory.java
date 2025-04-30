@@ -415,10 +415,4 @@ public class Territory {
 
 	//endregion
 
-	//region Buttons
-
-
-
-	//endregion
-
 }
