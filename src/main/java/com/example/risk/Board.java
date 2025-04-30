@@ -124,8 +124,6 @@ public class Board {
 	public Board(String filename) throws Exception {
 		this();
 		readBoardFile(filename);
-
-
 	}
 
 	//endregion
@@ -141,8 +139,6 @@ public class Board {
 		players.add(player);
 		if (players.size() == 1) {
 			currentPlayer = player;
-			troopsToDeploy = player.getDeployCount(this);
-			phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 		}
 	}
 
@@ -211,6 +207,17 @@ public class Board {
 		return basement;
 	}
 
+	public void assignTerritories() {
+		int numLoops = 0;
+		for (Territory territory : territories) {
+			territory.setPlayer(players.get((numLoops % players.size())));
+			numLoops++;
+		}
+
+		troopsToDeploy = currentPlayer.getDeployCount(this);
+		phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+	}
+
 	//endregion
 
 	//region Game Logic
@@ -245,10 +252,10 @@ public class Board {
 	 */
 	public void onTerritoryButton(Territory territory) {
 		if (phase.equals("deploy")) {
-			phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 			if (currentPlayer.equals(territory.getPlayer())) {
 				territory.addTroops(1);
 				troopsToDeploy--;
+				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 
 				if (troopsToDeploy == 0) {
 					phase = "conquer";
@@ -294,7 +301,7 @@ public class Board {
 		nextPlayer();
 		troopsToDeploy = currentPlayer.getDeployCount(this);
 		phase = "deploy";
-		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
+		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 		endTurnButton.setVisible(false);
 	}
 

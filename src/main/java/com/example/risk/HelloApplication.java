@@ -29,6 +29,8 @@ public class HelloApplication extends Application {
 		board.addPlayer("Player1", new Color(0,0,0,0));
 		board.addPlayer("Player2", new Color(1,0,0,0));
 
+		board.assignTerritories();
+
 		Group group = board.getGroup();
 
 		Scene scene = new Scene(group,500,500);
