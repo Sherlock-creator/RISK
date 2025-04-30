@@ -315,12 +315,14 @@ public class Board {
 				//Checks that the first clicked territory is owned by the player, and that a territory has not been selected yet
 				if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
 					selectedTerritory = territory;
+					selectedTerritory.setHighlight(true);
 					cancelButton.setVisible(true);
 				}
 				//If a territory is selected, checks that the clicked territory is not owned by the player (you don't want to attack yourself)
 				else if (!(currentPlayer.equals(territory.getPlayer())) && selectedTerritory != null) {
 						boolean success = selectedTerritory.conquer(territory);
 						if (success) {
+							selectedTerritory.setHighlight(false);
 							selectedTerritory = null;
 						}
 
@@ -328,11 +330,13 @@ public class Board {
 			}
 			case "move" -> {
 				// Checks that the current player is owns the territory, then selects it
-				// if a territory is selected the it then checks that the territory they are trying to move troops to is also owned by the current player
+				// if a territory is selected it then checks that the territory they are trying to move troops to is also owned by the current player
 				if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
 					selectedTerritory = territory;
+					selectedTerritory.setHighlight(true);
 				} else if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory != null) {
 					selectedTerritory.moveTroops(territory, selectedTerritory.getTroops() - 1);
+					selectedTerritory.setHighlight(false);
 					selectedTerritory = null;
 				}
 			}
@@ -357,7 +361,10 @@ public class Board {
 	 * deselects the territory that is currently selected
 	 */
 	public void onCancelButton() {
-		selectedTerritory = null;
+		if (selectedTerritory != null) {
+			selectedTerritory.setHighlight(false);
+			selectedTerritory = null;
+		}
 		cancelButton.setVisible(false);
 	}
 
@@ -375,7 +382,10 @@ public class Board {
 			}
 			case "conquer" -> {
 				cancelButton.setVisible(false);
-				selectedTerritory = null;
+				if (selectedTerritory != null) {
+					selectedTerritory.setHighlight(false);
+					selectedTerritory = null;
+				}
 				phase = "move";
 				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
 				doneButton.setVisible(false);
@@ -388,7 +398,10 @@ public class Board {
 			}
 			case "move" -> {
 				cancelButton.setVisible(false);
-				selectedTerritory = null;
+				if (selectedTerritory != null) {
+					selectedTerritory.setHighlight(false);
+					selectedTerritory = null;
+				}
 				nextPlayer();
 				troopsToDeploy = currentPlayer.getDeployCount(this);
 				phase = "deploy";

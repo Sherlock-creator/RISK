@@ -255,6 +255,19 @@ public class Territory {
 		neighbors.remove(neighbor);
 	}
 
+	/**
+	 * Turns on and off the highlight around the selected territory
+	 * @param on turns on the highlight if true
+	 */
+	public void setHighlight(boolean on) {
+		if (on) {
+			circle.setStroke(new Color(0, 0, 0, 1));
+		} else {
+			circle.setStroke(new Color(0, 0, 0, 0));
+		}
+
+	}
+
 	//endregion
 
 	//region Move Logic
