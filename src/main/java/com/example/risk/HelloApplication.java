@@ -25,7 +25,7 @@ public class HelloApplication extends Application {
 
 		stage.setTitle("Risk");
 
-		Board board = new Board("src/TestBoardManual.txt");
+		Board board = new Board("src/TestBoardAutomatic.txt");
 		board.addPlayer("Player1", new Color(0,0,0,0));
 		board.addPlayer("Player2", new Color(1,0,0,0));
 
@@ -37,31 +37,6 @@ public class HelloApplication extends Application {
 		stage.setScene(scene);
 		stage.show();
 
-		/*
-		stage.setTitle("Risk");
-		HashSet<Territory> set1 = new HashSet<>();
-		set1.add(territory2);
-		HashSet<Territory> set2 = new HashSet<>();
-		set2.add(territory1);
-
-		territory1 = new Territory("test1",200,200, set1);
-		territory2 = new Territory("test2", 300, 300, set2);
-
-		Button addTroops = new Button("add 5 troops");
-		addTroops.setOnAction(e -> territory1.addTroops(5));
-
-		Group layout = new Group();
-		layout.getChildren().add(territory1.getButton());
-		layout.getChildren().add(territory1.getLabel());
-		layout.getChildren().add(addTroops);
-
-		layout.getChildren().add(territory2.getButton());
-		layout.getChildren().add(territory2.getLabel());
-
-		Scene scene = new Scene(layout,500,500);
-		stage.setScene(scene);
-		stage.show();
-		*/
 	}
 
 	public static void main(String[] args) {

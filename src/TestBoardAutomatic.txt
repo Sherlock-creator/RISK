@@ -1,5 +1,5 @@
 AutomaticNeighbors
-75
+120 2
 Allentown 100 100
 Macungie 150 50
 Coopersburg 150 150

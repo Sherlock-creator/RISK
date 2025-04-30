@@ -200,15 +200,7 @@ public class Board {
 			for (int j = i+1; j < territories.size(); j++) {
 				Territory other = territoryArrayList.get(j);
 				if (territory.getNeighbors().contains(other)) {
-					double LINE_OFFSET_X = 0;
-					double LINE_OFFSET_Y = 0;
-					basement.getChildren().add(new Line(territory.getX()+LINE_OFFSET_X,territory.getY()+LINE_OFFSET_Y,other.getX()+LINE_OFFSET_X,other.getY()+LINE_OFFSET_Y));
-					//basement.getChildren().add(new Line(
-					//		territory.getX()+territory.getButton().getWidth()/2,
-					//		territory.getY()+territory.getButton().getHeight()/2,
-					//		other.getX()+other.getButton().getWidth()/2,
-					//		other.getY()+other.getButton().getHeight()/2
-					//));
+					basement.getChildren().add(new Line(territory.getX(),territory.getY(),other.getX(),other.getY()));
 				}
 			}
 
@@ -345,18 +337,17 @@ public class Board {
 	 *
 	 * <p><b>File format is:</b><br>
 	 * ManualNeighbors/AutomaticNeighbors<br>
-	 * [Range]<br>
-	 * TerritoryName0 y x [Neighbor0,Neighbor1,Neighbor2]<br>
-	 * TerritoryName1 y x [Neighbor0,Neighbor1,Neighbor2]<br>
-	 * TerritoryName2 y x [Neighbor0,Neighbor1,Neighbor2]</p>
-	 *
-	 * <p><b>Take note that y and x are in unconventional order for coordinates, and that y starts at 0 at the top of
-	 * the screen and increases going downwards. This is to be consistent with JavaFX.</b></p>
+	 * [Range NeighborMax]<br>
+	 * TerritoryName0 x y [Neighbor0 Neighbor1 Neighbor2]<br>
+	 * TerritoryName1 x y [Neighbor0 Neighbor1 Neighbor2]<br>
+	 * TerritoryName2 x y [Neighbor0 Neighbor1 Neighbor2]</p>
 	 *
 	 * <p>Neighbors should only be specified if ManualNeighbors is on.</p>
 	 *
-	 * <p>Range is only used if mode is AutomaticNeighbors. AutomaticNeighbors determines whether territories
-	 * are connected based on whether they're within Radius units of each other.</p>
+	 * <p>Range and NeighborMax are only used if mode is AutomaticNeighbors. AutomaticNeighbors determines whether
+	 * territories are connected based on whether they're within Radius units of each other and limits the number of
+	 * neighbors a given territory can have by NeighborMax. If NeighborMax is reached, the closest territories are
+	 * picked over further ones.</p>
 	 *
 	 * @param filename the board file that will be read
 	 * @throws FileNotFoundException if the file is not found
@@ -369,17 +360,21 @@ public class Board {
 		assert mode.equals("ManualNeighbors") || mode.equals("AutomaticNeighbors")
 				: "Invalid file mode. Must be ManualNeighbors or AutomaticNeighbors";
 
-		double range;
+		// Parse range and neighborMax
+		double range = 0;
+		int neighborMax = 0;
 		if (mode.equals("AutomaticNeighbors"))
 			try {
-				range = Double.parseDouble(scanner.nextLine());
+				range = Double.parseDouble(scanner.next());
+				neighborMax = Integer.parseInt(scanner.next());
+				scanner.nextLine();
 			} catch (Exception e) {
 				throw new Exception("Range format is wrong for AutomaticNeighbors. Must be a number.");
 			}
 
 		// Map that will hold the neighbor relations between all the territories
 		HashMap<String, ArrayList<String>> neighborMap = new HashMap<>();
-		// Map that will allow for accessing territory by name
+		// Map that will allow for accessing territories by name
 		HashMap<String, Territory> nameMap = new HashMap<>();
 
 		// Loop through list of territories
@@ -391,17 +386,17 @@ public class Board {
 			neighborMap.put(name, new ArrayList<>());
 
 			// Parse coordinates
-			double y;
 			double x;
+			double y;
 			try {
-				y = Double.parseDouble(lineScanner.next());
 				x = Double.parseDouble(lineScanner.next());
+				y = Double.parseDouble(lineScanner.next());
 			} catch (Exception e) {
 				throw new Exception("Coordinate format is wrong. Must be a pair of numbers.");
 			}
 
-			// Add neighbors
-			if (mode.equals("ManualNeighbors")) { // Parse neighbor names
+			// Add neighbor names to map
+			if (mode.equals("ManualNeighbors")) {
 				while (lineScanner.hasNext()) {
 					String neighbor = lineScanner.next();
 					neighborMap.get(name).add(neighbor);
@@ -424,7 +419,37 @@ public class Board {
 				}
 			}
 		} else if (mode.equals("AutomaticNeighbors")) {
-			//TODO optional, make a system for automatically adding neighbors based on range variable
+			for (Territory territory : territories) {
+
+				for (Territory other : territories) {
+					if (!territory.equals(other) && territory.getDistance(other) < range) {
+						territory.addNeighbor(other);
+					}
+				}
+
+				// Picks the closest territories in neighborList until neighborMax is reached
+				while (territory.getNeighbors().size() > neighborMax) {
+					Territory farthest = territory;
+					for (Territory neighbor : territory.getNeighbors()) {
+						if (territory.getDistance(neighbor) > territory.getDistance(farthest)) {
+							farthest = neighbor;
+						}
+					}
+					territory.removeNeighbor(farthest);
+				}
+
+				territory.getNeighbors().size();
+			}
+		}
+
+		// Check if all neighboring is mutual, makes it mutual if it isn't
+		for (Territory territory : territories) {
+			for (Territory other : territory.getNeighbors()) {
+				if (!other.getNeighbors().contains(territory)) {
+					other.addNeighbor(territory);
+					//System.out.printf("Warning: %s does not mutually neighbor %s.\n", other.getName(), territory.getName());
+				}
+			}
 		}
 	}
 

@@ -204,6 +204,10 @@ public class Territory {
 		return label;
 	}
 
+	public double getDistance(Territory other) {
+		return Math.sqrt(Math.pow(other.getX()-this.getX(),2) + Math.pow(other.getY()-this.getY(),2));
+	}
+
 	//endregion
 
 	//region Setters
@@ -235,6 +239,10 @@ public class Territory {
 
 	public void addNeighbor(Territory neighbor) {
 		neighbors.add(neighbor);
+	}
+
+	public void removeNeighbor(Territory neighbor) {
+		neighbors.remove(neighbor);
 	}
 
 	//endregion
