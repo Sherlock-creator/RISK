@@ -59,8 +59,14 @@ public class Board {
 	 */
 	private Label phaseName;
 
+	/**
+	 * Holds the number of troops the current player has left to deploy in the deployment phase
+	 */
 	private int troopsToDeploy;
 
+	/**
+	 * During the conquer phase, this button will allow the current player to deselect the territory they are using to attack with
+	 */
 	private Button cancelButton;
 
 	//endregion
