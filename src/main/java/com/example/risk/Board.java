@@ -5,11 +5,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
 
-import java.awt.event.PaintEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -196,8 +196,9 @@ public class Board {
 	public Group getGroup() {
 		Group basement = new Group();
 
-		// for each territory, add its button and label to the group
-		ArrayList<Node> buttonLableList = new ArrayList<>();
+		// for each territory, add its button, label, circle, and line to the group
+		ArrayList<Node> buttonLabelList = new ArrayList<>();
+		ArrayList<Circle> circleList = new ArrayList<>();
 		ArrayList<Territory> territoryArrayList = new ArrayList<>(territories);
 		for (int i = 0; i < territories.size(); i++) {
 			Territory territory = territoryArrayList.get(i);
@@ -209,13 +210,15 @@ public class Board {
 				}
 			}
 
-			basement.getChildren().add(territory.getCircle());
-
-			buttonLableList.add(territory.getButton()); // Why yes, I did call this variable basement purely
-			buttonLableList.add(territory.getLabel());  // so I could call basement.getChildren() -Noah Jones
+			circleList.add(territory.getCircle());
+			buttonLabelList.add(territory.getButton());
+			buttonLabelList.add(territory.getLabel());
 		}
 
-		basement.getChildren().addAll(buttonLableList);
+		// Why yes, I did call this variable basement purely
+		// so I could call basement.getChildren() -Noah Jones
+		basement.getChildren().addAll(circleList);
+		basement.getChildren().addAll(buttonLabelList);
 
 		basement.getChildren().add(endTurnButton);
 		basement.getChildren().add(doneButton);
@@ -233,7 +236,7 @@ public class Board {
 		}
 
 		troopsToDeploy = currentPlayer.getDeployCount(this);
-		phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+		phaseName = new Label(String.format("%s's %s phase\n%d troops left", currentPlayer.getId(), phase, troopsToDeploy));
 	}
 
 	//endregion
@@ -269,42 +272,40 @@ public class Board {
 	 * @param territory the territory that the button was clicked on
 	 */
 	public void onTerritoryButton(Territory territory) {
-		if (phase.equals("deploy")) {
-			if (currentPlayer.equals(territory.getPlayer())) {
-				territory.addTroops(1);
-				troopsToDeploy--;
-				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+		switch (phase) {
+			case "deploy" -> {
+				// Deploy phase. Click on territories to add 1 troop at a time until you have no more deployable troops
+				if (currentPlayer.equals(territory.getPlayer())) {
+					territory.addTroops(1);
+					troopsToDeploy--;
+					phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 
-				if (troopsToDeploy == 0) {
-					phase = "conquer";
-					phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
-					doneButton.setVisible(true);
+					if (troopsToDeploy == 0) {
+						nextPhase();
+					}
 				}
 			}
-
-		} else if (phase.equals("conquer")) {
-			if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
-				selectedTerritory = territory;
-				selectedTerritory.getCircle().setStroke(Color.BLACK);
-				cancelButton.setVisible(true);
-			} else if (!(currentPlayer.equals(territory.getPlayer())) && selectedTerritory != null) {
-				try {
-					boolean success = selectedTerritory.conquer(territory);
-					if (success) {
-						selectedTerritory.getCircle().setStroke(new Color(0,0,0,0));
-						selectedTerritory = null;
-						cancelButton.setVisible(false);
+			case "conquer" -> {
+				if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
+					selectedTerritory = territory;
+					cancelButton.setVisible(true);
+				} else if (!(currentPlayer.equals(territory.getPlayer())) && selectedTerritory != null) {
+					try {
+						boolean success = selectedTerritory.conquer(territory);
+						if (success) {
+							selectedTerritory = null;
+						}
+					} catch (Exception _) {
 					}
-				} catch (Exception _){}
+				}
 			}
-		} else if (phase.equals("move")){
-			if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
-				selectedTerritory = territory;
-				selectedTerritory.getCircle().setStroke(Color.BLACK);
-			} else if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory != null) {
-				selectedTerritory.moveTroops(territory, selectedTerritory.getTroops() - 1);
-				selectedTerritory.getCircle().setStroke(new Color(0,0,0,0));
-				selectedTerritory = null;
+			case "move" -> {
+				if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
+					selectedTerritory = territory;
+				} else if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory != null) {
+					selectedTerritory.moveTroops(territory, selectedTerritory.getTroops() - 1);
+					selectedTerritory = null;
+				}
 			}
 		}
 	}
@@ -313,40 +314,49 @@ public class Board {
 	 * Ends the "conquer" phase and moves to the "move" phase
 	 */
 	public void onDoneButton() {
-		cancelButton.setVisible(false);
-		if (selectedTerritory != null) {
-			selectedTerritory.getCircle().setStroke(new Color(0, 0, 0, 0));
-		}
-		selectedTerritory = null;
-		phase = "move";
-		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
-		doneButton.setVisible(false);
-		endTurnButton.setVisible(true);
+		nextPhase();
 	}
 
 	/**
 	 * Ends the turn and moves to the next person, going to the "deploy" phase if the player has any troops to deploy
 	 */
 	public void onEndTurnButton() {
-		cancelButton.setVisible(false);
-		if (selectedTerritory != null) {
-			selectedTerritory.getCircle().setStroke(new Color(0, 0, 0, 0));
-		}
-		selectedTerritory = null;
-		nextPlayer();
-		troopsToDeploy = currentPlayer.getDeployCount(this);
-		phase = "deploy";
-		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
-		endTurnButton.setVisible(false);
+		nextPhase();
 	}
 
 	/**
 	 * deselects the territory that is currently selected
 	 */
 	public void onCancelButton() {
-		selectedTerritory.getCircle().setStroke(new Color(0,0,0,0));
 		selectedTerritory = null;
 		cancelButton.setVisible(false);
+	}
+
+	private void nextPhase() {
+		switch (phase) {
+			case "deploy" -> {
+				phase = "conquer";
+				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
+				doneButton.setVisible(true);
+			}
+			case "conquer" -> {
+				cancelButton.setVisible(false);
+				selectedTerritory = null;
+				phase = "move";
+				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
+				doneButton.setVisible(false);
+				endTurnButton.setVisible(true);
+			}
+			case "move" -> {
+				cancelButton.setVisible(false);
+				selectedTerritory = null;
+				nextPlayer();
+				troopsToDeploy = currentPlayer.getDeployCount(this);
+				phase = "deploy";
+				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+				endTurnButton.setVisible(false);
+			}
+		}
 	}
 
 	//endregion

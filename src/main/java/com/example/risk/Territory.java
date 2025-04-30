@@ -1,6 +1,9 @@
 package com.example.risk;
 
-import javafx.scene.control.*;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
@@ -34,6 +37,16 @@ public class Territory {
 	 * Height of all territory buttons
 	 */
 	static final private double BUTTON_HEIGHT = 20;
+
+	/**
+	 * Radius, is the same for all circles
+	 */
+	static private double RADIUS = 25;
+
+	/**
+	 * Default color for uncaptured territories
+	 */
+	static private Color DEFAULT_COLOR = new Color(0,0,0,0);
 
 	//endregion
 
@@ -73,11 +86,6 @@ public class Territory {
 	 * Set of all neighboring territories
 	 */
 	private HashSet<Territory> neighbors;
-
-	/**
-	 * Radius, is the same for all circles
-	 */
-	static private double radius = 25;
 
 	/**
 	 * Circle for graphics
@@ -124,7 +132,7 @@ public class Territory {
 		this.y = y;
 		this.board = board;
 
-		circle = new Circle(x, y, radius);
+		circle = new Circle(x, y, RADIUS);
 
 		label.relocate(x-10, y-30);
 		label.setText(name);
@@ -219,7 +227,7 @@ public class Territory {
 	 * @param r radius
 	 */
 	static public void setRadius(double r) {
-		radius = r;
+		RADIUS = r;
 	}
 
 	/**
