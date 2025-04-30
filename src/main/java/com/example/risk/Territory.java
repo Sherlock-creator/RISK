@@ -255,6 +255,19 @@ public class Territory {
 		neighbors.remove(neighbor);
 	}
 
+	/**
+	 * Turns on and off the highlight around the selected territory
+	 * @param on turns on the highlight if true
+	 */
+	public void setHighlight(boolean on) {
+		if (on) {
+			circle.setStroke(new Color(0, 0, 0, 1));
+		} else {
+			circle.setStroke(new Color(0, 0, 0, 0));
+		}
+
+	}
+
 	//endregion
 
 	//region Move Logic
@@ -326,9 +339,8 @@ public class Territory {
 	/**
 	 * Wages war on a neighboring opponent controlled territory and, if successful in destroying the enemy troops, moves the troops into that territory and conquers it
 	 * @param defender Territory to wage war on
-	 * @throws Exception if t is not a neighbor of this territory
 	 */
-	public boolean conquer(Territory defender) throws Exception{
+	public boolean conquer(Territory defender) {
 		if (!canConquer(defender)) {
 			return false;
 		}
