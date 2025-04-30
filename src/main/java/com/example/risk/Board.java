@@ -245,7 +245,7 @@ public class Board {
 	public void nextPlayer() {
 		try {
 			currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {
 			currentPlayer = players.getFirst();
 		}
 	}
