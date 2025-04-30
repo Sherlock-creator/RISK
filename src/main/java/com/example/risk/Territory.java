@@ -91,8 +91,14 @@ public class Territory {
 	 */
 	private Circle circle;
 
+	/**
+	 * Button that when clicked will pass this territories reference to the board
+	 */
 	private Button button;
 
+	/**
+	 * Text that displays the territories name
+	 */
 	private Label label;
 
 	//endregion
@@ -209,10 +215,18 @@ public class Territory {
 		return button;
 	}
 
+	/**
+	 * @return the reference of the label
+	 */
 	public Label getLabel() {
 		return label;
 	}
 
+	/**
+	 * Calculates the distance between this territory and another territory
+	 * @param other territory that will be used in distance calculation
+	 * @return the distance between the two territories
+	 */
 	public double getDistance(Territory other) {
 		return Math.sqrt(Math.pow(other.getX()-this.getX(),2) + Math.pow(other.getY()-this.getY(),2));
 	}
@@ -247,10 +261,18 @@ public class Territory {
 		button.setText(((Integer)troops).toString());
 	}
 
+	/**
+	 * Adds a territory to the list of neighbors
+	 * @param neighbor territory to be added
+	 */
 	public void addNeighbor(Territory neighbor) {
 		neighbors.add(neighbor);
 	}
 
+	/**
+	 * Removes a territory from the list of neighbors
+	 * @param neighbor territory to be removed
+	 */
 	public void removeNeighbor(Territory neighbor) {
 		neighbors.remove(neighbor);
 	}
@@ -339,6 +361,7 @@ public class Territory {
 	/**
 	 * Wages war on a neighboring opponent controlled territory and, if successful in destroying the enemy troops, moves the troops into that territory and conquers it
 	 * @param defender Territory to wage war on
+	 * @return a boolean, true if the territory was successfully conquered
 	 */
 	public boolean conquer(Territory defender) {
 		if (!canConquer(defender)) {
@@ -354,12 +377,14 @@ public class Territory {
 		//sets defender dice total
 		defenderDice = Math.min(defender.troops, 2);
 
+		//create array list of attacker dice rolls
 		Random r = new Random();
 		ArrayList<Integer> attackerRolls = new ArrayList<>();
 		for (int i = 0; i < attackerDice; i++) {
 			attackerRolls.add((r.nextInt(6)+1));
 		}
 
+		//create array list of defender dice rolls
 		ArrayList<Integer> defenderRolls = new ArrayList<>();
 		for (int i = 0; i < defenderDice; i++) {
 			defenderRolls.add((r.nextInt(6)+1));
@@ -368,6 +393,8 @@ public class Territory {
 		attackerRolls = sortRolls(attackerRolls);
 		defenderRolls = sortRolls(defenderRolls);
 
+		//Compares the highest rolls for both sides and the second highest if it exists
+		//The highest dice in each pair cause the opposing side to take a casualty
 		int attackerLosses = 0;
 		int defenderLosses = 0;
 		while ((!attackerRolls.isEmpty()) && (!defenderRolls.isEmpty())) {
@@ -381,7 +408,10 @@ public class Territory {
 			defenderRolls.removeFirst();
 		}
 
+		//attacker losses are subtracted
 		addTroops(attackerLosses);
+		//defender losses are subtracted, if addTroops throws an exception, then the defending side has lost all of its troops
+		//the territories owner is changed and the remaining armies in the attacking territory move into the newly conquered territory
 		try {
 			defender.addTroops(defenderLosses);
 		}catch (IllegalArgumentException e) {
@@ -401,6 +431,7 @@ public class Territory {
 	private ArrayList<Integer> sortRolls(ArrayList<Integer> rolls) {
 		ArrayList<Integer> sorted = new ArrayList<>();
 		int size = rolls.size();
+		//loops through the array list, finds the highest entry adds it to the sorted list, then removes that entry from the list till the old list is empty
 		for (int i = 0; i < size; i++) {
 			int max = 0;
 			for (int roll : rolls) {
@@ -420,10 +451,11 @@ public class Territory {
 	 * @return boolean -true if territory can be conquered
 	 */
 	public boolean canConquer(Territory defender) {
-		//loops through the territories neighbors and checks if t is one of them
+		//checks that the attacking territory has enough troops to conquer
 		if (this.troops <= 1) {
 			return false;
 		}
+		//loops through the territories neighbors and checks if t is one of them
 		for (Territory territory : neighbors) {
 			if (territory == defender) {
 				return true;
