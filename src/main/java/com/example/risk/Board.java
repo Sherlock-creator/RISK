@@ -285,11 +285,13 @@ public class Board {
 		} else if (phase.equals("conquer")) {
 			if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
 				selectedTerritory = territory;
+				selectedTerritory.getCircle().setStroke(Color.BLACK);
 				cancelButton.setVisible(true);
 			} else if (!(currentPlayer.equals(territory.getPlayer())) && selectedTerritory != null) {
 				try {
 					boolean success = selectedTerritory.conquer(territory);
 					if (success) {
+						selectedTerritory.getCircle().setStroke(new Color(0,0,0,0));
 						selectedTerritory = null;
 						cancelButton.setVisible(false);
 					}
@@ -298,8 +300,10 @@ public class Board {
 		} else if (phase.equals("move")){
 			if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
 				selectedTerritory = territory;
+				selectedTerritory.getCircle().setStroke(Color.BLACK);
 			} else if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory != null) {
 				selectedTerritory.moveTroops(territory, selectedTerritory.getTroops() - 1);
+				selectedTerritory.getCircle().setStroke(new Color(0,0,0,0));
 				selectedTerritory = null;
 			}
 		}
@@ -310,6 +314,9 @@ public class Board {
 	 */
 	public void onDoneButton() {
 		cancelButton.setVisible(false);
+		if (selectedTerritory != null) {
+			selectedTerritory.getCircle().setStroke(new Color(0, 0, 0, 0));
+		}
 		selectedTerritory = null;
 		phase = "move";
 		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
@@ -322,6 +329,9 @@ public class Board {
 	 */
 	public void onEndTurnButton() {
 		cancelButton.setVisible(false);
+		if (selectedTerritory != null) {
+			selectedTerritory.getCircle().setStroke(new Color(0, 0, 0, 0));
+		}
 		selectedTerritory = null;
 		nextPlayer();
 		troopsToDeploy = currentPlayer.getDeployCount(this);
@@ -334,6 +344,7 @@ public class Board {
 	 * deselects the territory that is currently selected
 	 */
 	public void onCancelButton() {
+		selectedTerritory.getCircle().setStroke(new Color(0,0,0,0));
 		selectedTerritory = null;
 		cancelButton.setVisible(false);
 	}
