@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -109,9 +110,6 @@ public class Board {
 	public Board(HashSet<Territory> territories) {
 		this();
 		this.territories = territories;
-
-		troopsToDeploy = currentPlayer.getDeployCount(this);
-		phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase");
 	}
 
 	/**
@@ -195,7 +193,17 @@ public class Board {
 		Group basement = new Group();
 
 		// for each territory, add its button and label to the group
-		for (Territory territory : territories) {
+		ArrayList<Territory> territoryArrayList = new ArrayList<>(territories);
+		for (int i = 0; i < territories.size(); i++) {
+			Territory territory = territoryArrayList.get(i);
+
+			for (int j = i+1; j < territories.size(); j++) {
+				Territory other = territoryArrayList.get(j);
+				if (territory.getNeighbors().contains(other)) {
+					basement.getChildren().add(new Line(territory.getX(),territory.getY(),other.getX(),other.getY()));
+				}
+			}
+
 			basement.getChildren().add(territory.getButton()); // Why yes, I did call this variable basement purely
 			basement.getChildren().add(territory.getLabel());  // so I could call basement.getChildren()
 		}
@@ -379,11 +387,10 @@ public class Board {
 
 			// Add neighbors
 			if (mode.equals("ManualNeighbors")) { // Parse neighbor names
-				lineScanner.useDelimiter(",");
 				while (lineScanner.hasNext()) {
-					neighborMap.get(name).add(lineScanner.next());
+					String neighbor = lineScanner.next();
+					neighborMap.get(name).add(neighbor);
 				}
-
 			}
 
 			// Create Territory object, add it to this board's list
