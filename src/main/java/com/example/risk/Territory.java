@@ -327,9 +327,8 @@ public class Territory {
 	/**
 	 * Wages war on a neighboring opponent controlled territory and, if successful in destroying the enemy troops, moves the troops into that territory and conquers it
 	 * @param defender Territory to wage war on
-	 * @throws Exception if t is not a neighbor of this territory
 	 */
-	public boolean conquer(Territory defender) throws Exception{
+	public boolean conquer(Territory defender) {
 		if (!canConquer(defender)) {
 			return false;
 		}

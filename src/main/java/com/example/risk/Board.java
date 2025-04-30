@@ -260,11 +260,14 @@ public class Board {
 	 */
 	public void assignTerritories() {
 		int numLoops = 0;
+
+		//loops through every territory in the hash set and assigns a player as that territories owner
 		for (Territory territory : territories) {
 			territory.setPlayer(players.get((numLoops % players.size())));
 			numLoops++;
 		}
 
+		//Sets up the beginning game state now that territories are assigned
 		troopsToDeploy = currentPlayer.getDeployCount(this);
 		phaseName = new Label(String.format("%s's %s phase\n%d troops left", currentPlayer.getId(), phase, troopsToDeploy));
 	}
@@ -313,19 +316,23 @@ public class Board {
 				}
 			}
 			case "conquer" -> {
+				//Checks that the first clicked territory is owned by the player, and that a territory has not been selected yet
 				if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
 					selectedTerritory = territory;
 					cancelButton.setVisible(true);
-				} else if (!(currentPlayer.equals(territory.getPlayer())) && selectedTerritory != null) {
-					try {
+				}
+				//If a territory is selected, checks that the clicked territory is not owned by the player (you don't want to attack yourself)
+				else if (!(currentPlayer.equals(territory.getPlayer())) && selectedTerritory != null) {
 						boolean success = selectedTerritory.conquer(territory);
 						if (success) {
 							selectedTerritory = null;
 						}
-					} catch (Exception _) {}
+
 				}
 			}
 			case "move" -> {
+				// Checks that the current player is owns the territory, then selects it
+				// if a territory is selected the it then checks that the territory they are trying to move troops to is also owned by the current player
 				if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
 					selectedTerritory = territory;
 				} else if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory != null) {
