@@ -352,7 +352,14 @@ public class Territory {
 		}
 
 		addTroops(attackerLosses);
-		defender.addTroops(defenderLosses);
+		try {
+			defender.addTroops(defenderLosses);
+		}catch (IllegalArgumentException e) {
+			defender.setPlayer(player);
+			defender.addTroops(this.getTroops() - 1);
+			addTroops(-1 * (this.getTroops() - 1));
+		}
+
 	}
 
 	/**

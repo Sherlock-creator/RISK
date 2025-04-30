@@ -97,7 +97,7 @@ public class Board {
 		endTurnButton.setVisible(false);
 
 		cancelButton = new Button("Cancel");
-		cancelButton.relocate(0,50);
+		cancelButton.relocate(0,25);
 		cancelButton.setOnAction(e -> onCancelButton());
 		cancelButton.setVisible(false);
 	}
@@ -137,8 +137,6 @@ public class Board {
 		players.add(player);
 		if (players.size() == 1) {
 			currentPlayer = player;
-			troopsToDeploy = player.getDeployCount(this);
-			phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 		}
 	}
 
@@ -221,8 +219,20 @@ public class Board {
 		basement.getChildren().add(endTurnButton);
 		basement.getChildren().add(doneButton);
 		basement.getChildren().add(phaseName);
+		basement.getChildren().add(cancelButton);
 
 		return basement;
+	}
+
+	public void assignTerritories() {
+		int numLoops = 0;
+		for (Territory territory : territories) {
+			territory.setPlayer(players.get((numLoops % players.size())));
+			numLoops++;
+		}
+
+		troopsToDeploy = currentPlayer.getDeployCount(this);
+		phaseName = new Label(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 	}
 
 	//endregion
@@ -259,10 +269,10 @@ public class Board {
 	 */
 	public void onTerritoryButton(Territory territory) {
 		if (phase.equals("deploy")) {
-			phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 			if (currentPlayer.equals(territory.getPlayer())) {
 				territory.addTroops(1);
 				troopsToDeploy--;
+				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 
 				if (troopsToDeploy == 0) {
 					phase = "conquer";
@@ -279,7 +289,6 @@ public class Board {
 				try {
 					selectedTerritory.conquer(territory);
 				} catch (Exception _){}
-				selectedTerritory = null;
 			}
 		} else if (phase.equals("move")){
 			if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
@@ -308,7 +317,7 @@ public class Board {
 		nextPlayer();
 		troopsToDeploy = currentPlayer.getDeployCount(this);
 		phase = "deploy";
-		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase");
+		phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
 		endTurnButton.setVisible(false);
 	}
 
