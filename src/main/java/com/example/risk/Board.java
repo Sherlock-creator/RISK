@@ -97,7 +97,7 @@ public class Board {
 		endTurnButton.setVisible(false);
 
 		cancelButton = new Button("Cancel");
-		cancelButton.relocate(0,50);
+		cancelButton.relocate(0,25);
 		cancelButton.setOnAction(e -> onCancelButton());
 		cancelButton.setVisible(false);
 	}
@@ -211,6 +211,7 @@ public class Board {
 		basement.getChildren().add(endTurnButton);
 		basement.getChildren().add(doneButton);
 		basement.getChildren().add(phaseName);
+		basement.getChildren().add(cancelButton);
 
 		return basement;
 	}
@@ -280,7 +281,6 @@ public class Board {
 				try {
 					selectedTerritory.conquer(territory);
 				} catch (Exception _){}
-				selectedTerritory = null;
 			}
 		} else if (phase.equals("move")){
 			if (currentPlayer.equals(territory.getPlayer()) && selectedTerritory == null) {
