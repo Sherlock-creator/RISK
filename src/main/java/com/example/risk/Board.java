@@ -403,10 +403,25 @@ public class Board {
 					selectedTerritory = null;
 				}
 				nextPlayer();
-				troopsToDeploy = currentPlayer.getDeployCount(this);
-				phase = "deploy";
-				phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
-				endTurnButton.setVisible(false);
+
+				boolean nextPlayerFound = false;
+				while (!nextPlayerFound) {
+					//If the next player has territories enter the if loop and set up the next players deploy phase
+					//If the player has no territories enter the else statement and remove that player from the game
+					if (!currentPlayer.getControlledTerritories(this).isEmpty()) {
+						troopsToDeploy = currentPlayer.getDeployCount(this);
+						phase = "deploy";
+						phaseName.setText(currentPlayer.getId() + "'s " + phase + " phase\n" + troopsToDeploy + " troops left");
+						endTurnButton.setVisible(false);
+						nextPlayerFound = true;
+					} else {
+						//This ensures that correct next player is gotten before removing the player that has been knocked out of the game
+						Player tmp = currentPlayer;
+						nextPlayer();
+						removePlayer(tmp);
+					}
+				}
+
 			}
 		}
 	}
