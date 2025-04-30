@@ -7,6 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -70,6 +73,11 @@ public class Board {
 	 */
 	private Button cancelButton;
 
+	/**
+	 * This is shown on screen when there is only one player left and a turn is ended
+	 */
+	private Label winScreen;
+
 	//endregion
 
 	//region Constructors
@@ -100,6 +108,12 @@ public class Board {
 		cancelButton.relocate(0,25);
 		cancelButton.setOnAction(e -> onCancelButton());
 		cancelButton.setVisible(false);
+
+		winScreen = new Label();
+		winScreen.setPrefHeight(500);
+		winScreen.setPrefWidth(500);
+		winScreen.setFont(Font.font("roboto", FontWeight.BOLD, FontPosture.REGULAR, 60));
+		winScreen.setVisible(false);
 	}
 
 	/**
@@ -224,7 +238,7 @@ public class Board {
 		basement.getChildren().add(doneButton);
 		basement.getChildren().add(phaseName);
 		basement.getChildren().add(cancelButton);
-
+		basement.getChildren().add(winScreen);
 		return basement;
 	}
 
@@ -324,6 +338,13 @@ public class Board {
 						if (success) {
 							selectedTerritory.setHighlight(false);
 							selectedTerritory = null;
+
+							//Checks current player owns all the territories on the board
+							//If so, it pops up a win screen
+							if (currentPlayer.getControlledTerritories(this).size() == territories.size()){
+								winScreen.setText(currentPlayer.getId() + " Wins!");
+								winScreen.setVisible(true);
+							}
 						}
 
 				}
@@ -407,7 +428,6 @@ public class Board {
 						removePlayer(tmp);
 					}
 				}
-
 			}
 		}
 	}
