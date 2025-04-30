@@ -6,15 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Represents the current state of the board
