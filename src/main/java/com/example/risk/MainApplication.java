@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class HelloApplication extends Application {
+public class MainApplication extends Application {
 
 	Territory territory1;
 	Territory territory2;
