@@ -137,7 +137,11 @@ public class Territory {
 		this.y = y;
 		this.board = board;
 
-		circle = new Circle(x, y, RADIUS);
+		if (name.equals("Bellfonte")) {
+			circle = new Circle(x, y, 200);
+		} else {
+			circle = new Circle(x, y, RADIUS);
+		}
 
 		label.relocate(x-10, y-30);
 		label.setText(name);
@@ -455,6 +459,11 @@ public class Territory {
 		if (this.troops <= 1) {
 			return false;
 		}
+
+		if (defender.name.equals("Bellfonte")) {
+			return false;
+		}
+
 		//loops through the territories neighbors and checks if t is one of them
 		for (Territory territory : neighbors) {
 			if (territory == defender) {

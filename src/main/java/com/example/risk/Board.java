@@ -586,20 +586,22 @@ public class Board {
 			for (Territory territory : territories) {
 
 				for (Territory other : territories) {
-					if (!territory.equals(other) && territory.getDistance(other) < range) {
+					if (!territory.equals(other) && (territory.getDistance(other) < range || territory.getName().equals("Bellfonte"))) {
 						territory.addNeighbor(other);
 					}
 				}
 
 				// Picks the closest territories in neighborList until neighborMax is reached
-				while (territory.getNeighbors().size() > neighborMax) {
-					Territory farthest = territory;
-					for (Territory neighbor : territory.getNeighbors()) {
-						if (territory.getDistance(neighbor) > territory.getDistance(farthest)) {
-							farthest = neighbor;
+				if (!territory.getName().equals("Bellfonte")) {
+					while (territory.getNeighbors().size() > neighborMax) {
+						Territory farthest = territory;
+						for (Territory neighbor : territory.getNeighbors()) {
+							if (territory.getDistance(neighbor) > territory.getDistance(farthest)) {
+								farthest = neighbor;
+							}
 						}
+						territory.removeNeighbor(farthest);
 					}
-					territory.removeNeighbor(farthest);
 				}
 
 				// Removes specifically excluded connections after everything is done

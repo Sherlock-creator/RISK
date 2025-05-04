@@ -15,3 +15,4 @@ Doylestown 280 310
 Warrington 280 370
 Lansdale 200 400
 Newtown 370 350
+Bellfont 200 200
